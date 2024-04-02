@@ -1,5 +1,5 @@
-<script lang="ts"></script>
-
-<div>aboba</div>
+<script lang="ts">
+    import "./main.css";
+</script>
 
 <slot />

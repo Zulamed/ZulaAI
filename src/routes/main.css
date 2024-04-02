@@ -1,0 +1,102 @@
+/* Fonts */
+@import url(https://fonts.googleapis.com/css?family=Montserrat:100,200,300,regular,500,600,700,800,900,100italic,200italic,300italic,italic,500italic,600italic,700italic,800italic,900italic);
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    --color-primary: #ffffff;
+    --color-primary-hover: #f1f1f1;
+    --color-secondary: #00BCA1;
+    --color-secondary-hover: #00A08C;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+    margin: 0;
+}
+
+/* Remove default padding */
+fieldset {
+    padding: 0;
+}
+
+/* Remove default border */
+button,
+input,
+optgroup,
+select,
+textarea {
+    border: 0;
+}
+
+/* Remove default vertical alignment */
+button,
+input,
+select,
+textarea {
+    vertical-align: middle;
+}
+
+/* Remove list styles (bullets, numbering) */
+ol,
+ul {
+    list-style: none;
+}
+
+/* Reset font styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Reset font sizes */
+h1,
+h2,
+h3,
+h4,
+p {
+    font-size: 1em;
+}
+
+/* Reset line heights */
+h1,
+h2,
+h3,
+h4,
+p {
+    line-height: 1;
+}
+
+/* Reset colors */
+body {
+    color: #fff;
+    background-color: #fff;
+}
+
+/* Reset text styles */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Remove default outline */
+button,
+input,
+textarea,
+select,
+a {
+    outline: none;
+}
