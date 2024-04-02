@@ -1,19 +1,20 @@
 <script lang="ts">
     import Terms from "$lib/components/terms.svelte";
-    import Button from "../components/button.svelte";
-    import Input from "../components/input.svelte";
+
+    import RegistrationForm from "../components/RegistrationForm.svelte";
 </script>
 
 <svelte:head>
-    <title>ZulaAI - Login</title>
+    <title>ZulaAI - Register</title>
 </svelte:head>
 
 <div class="container">
     <img class="top-part" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
     <div class="middle-part">
-        <h1 class="home-title">Willkommen zurück</h1>
+        <h1 class="home-title">Profil erstellen</h1>
+        <p class="subtitle">Registrieren Sie sich um ZulaMed zu nutzen</p>
         <form class="form login-form">
-            <div class="input-wrapper">
+            <!-- <div class="input-wrapper">
                 <Input
                     inputType="email"
                     inputPlaceholder="E-Mail-Adresse"
@@ -25,13 +26,22 @@
                     inputId="password"
                     btnDisplay="block"
                 />
+                <Input
+                    inputType="password"
+                    inputPlaceholder="Passwort wiederholen"
+                    inputId="password-repeat"
+                    btnDisplay="block"
+                />
             </div>
-            <div class="reset-password">
-                <a href="/recover" class=""> Passwort vergessen?</a>
-            </div>
-            <Button buttonText="Weiter" buttonType="submit" onClick="" />
+
+            <Button buttonText="Weiter" buttonType="submit" />
             <p class="register-link">
-                Haben Sie keinen Account? <a href="register">Klicken Sie hier</a
+                Sie haben einen Account? <a href="/register">Klicken Sie hier</a
+                >
+            </p> -->
+            <RegistrationForm />
+            <p class="register-link">
+                Sie haben einen Account? <a href="/register">Klicken Sie hier</a
                 >
             </p>
         </form>
@@ -40,6 +50,14 @@
 </div>
 
 <style>
+    .subtitle {
+        text-align: center;
+        color: #616163;
+        font-size: 16px;
+        font-weight: 400;
+        margin-top: 19px;
+        margin-bottom: 42px;
+    }
     .container {
         display: flex;
         flex-direction: column;
@@ -60,18 +78,6 @@
         color: #00bca1;
         text-decoration: underline;
     }
-    .reset-password {
-        width: 100%;
-        font-size: 16px;
-        text-align: start;
-        font-weight: 400;
-        cursor: pointer;
-        text-align: start;
-        color: #616163;
-        text-decoration: underline;
-        margin-top: 26px;
-        margin-bottom: 41px;
-    }
 
     .form.login-form {
         display: flex;
@@ -83,6 +89,7 @@
         display: flex;
         flex-direction: column;
         gap: 36px;
+        margin-bottom: 35px;
     }
 
     .home-title {
@@ -108,12 +115,6 @@
         .middle-part .home-title {
             font-size: 28px;
             font-weight: 600;
-        }
-
-        .reset-password {
-            font-size: 13px;
-            margin-top: 16px;
-            margin-bottom: 27px;
         }
 
         .register-link {
@@ -156,13 +157,6 @@
         .middle-part .home-title {
             font-size: 28px;
             font-weight: 600;
-        }
-
-        .reset-password {
-            font-size: 13px;
-            font-weight: 400;
-            margin-top: 20px;
-            margin-bottom: 24px;
         }
 
         .register-link {

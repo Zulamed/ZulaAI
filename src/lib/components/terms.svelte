@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let textColor = "#00BCA1";
+    export let textColor = "#616163";
     export let textDisplay = "block";
     function termsOpen() {
         const overlay = document.querySelector(".overlay-terms") as HTMLElement;

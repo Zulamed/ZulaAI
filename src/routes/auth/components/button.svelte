@@ -1,9 +1,23 @@
 <script lang="ts">
     export let buttonText = "Button Text";
     export let buttonType: "submit" | "button" | "reset" = "submit";
+    export let buttonBgColor = "var(--color-secondary)";
+    export let buttonTextColor = "var(--color-primary)";
+    export let onClick: (() => void) | "";
+
+    function handleClick() {
+        if (onClick) {
+            onClick();
+        }
+    }
 </script>
 
-<button class="default-button" type={buttonType}>
+<button
+    style="background-color: {buttonBgColor}; color: {buttonTextColor};"
+    on:click={handleClick}
+    class="default-button"
+    type={buttonType}
+>
     {buttonText}
 </button>
 
@@ -13,11 +27,12 @@
         font-weight: 400;
         color: var(--color-primary);
         background-color: var(--color-secondary);
-        padding: 18px 0;
+        padding: 16px 0;
         border-radius: 8px;
-        width: 262px;
+        width: 240px;
         text-align: center;
         cursor: pointer;
+        border: 1px solid var(--color-secondary);
     }
 
     .default-button:hover {
@@ -37,7 +52,6 @@
         .default-button {
             font-size: 18px;
             padding: 15px 0;
-            width: 146px;
         }
     }
 
