@@ -1,8 +1,13 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+    import type { Writable } from "svelte/store";
+
     export let inputId = "input";
     export let inputType = "text";
     export let inputPlaceholder = "Placeholder";
     export let btnDisplay = "none";
+    export let isValid = true;
+    export let value: Writable<string>;
 
     function showPassword() {
         const input = document.getElementById(inputId) as HTMLInputElement;
@@ -18,37 +23,72 @@
         } else {
             input.type = "password";
         }
-    }
-    function validateInput() {
-        const input = document.getElementById(inputId) as HTMLInputElement;
-        const isValid = input.value.trim() !== ""; // Проверяем, что значение не пустое после удаления пробелов
 
-        if (!isValid) {
-            input.classList.add("error");
+        if (input.type === "password") {
+            buttonSvg.src = "/icons/View25.svg";
         } else {
-            input.classList.remove("error");
+            buttonSvg.src = "/icons/View_hide.svg";
         }
+        isValid = input.checkValidity();
     }
+
+    let isEmpty = true;
+
+    function onInput(e: Event) {
+        // if (e.target.value.trim() !== "") {
+        //     isEmpty = false;
+        // } else {
+        //     isEmpty = true;
+        // }
+        let target = e.target as HTMLInputElement;
+        isEmpty = target.value.trim() === "";
+        $value = target.value;
+    }
+
+    let inputElement: HTMLInputElement;
+    onMount(() => {
+        inputElement.value = $value;
+        isEmpty = inputElement.value.trim() === "";
+    });
 </script>
 
 <div class="entryarea">
-    <input id={inputId} type={inputType} class="input" required />
-    <label for={inputId} class="labelline">{inputPlaceholder}</label>
+    <input
+        id={inputId}
+        type={inputType}
+        class:input={true}
+        on:input={onInput}
+        class:focus={!isEmpty}
+        bind:this={inputElement}
+        required
+    />
+    <label for={inputId} class="labelline" class:focus={!isEmpty}
+        >{inputPlaceholder}</label
+    >
     <button
         on:click={showPassword}
         type="button"
         style="display: {btnDisplay};"
         class="pass-show"
-        ><img class="pass-show-svg" src="/icons/View.svg" alt="" /></button
+        ><img class="pass-show-svg" src="/icons/View25.svg" alt="" /></button
     >
     <!-- <img class="input-error" src="/icons/Frame.svg" alt="" /> -->
+
+    <!-- ======================================== -->
+    <div class="labelline focus" style="display: none;"></div>
+    <div class="input valid" style="display: none;"></div>
+    <div class="input focus" style="display: none;"></div>
+    <div class="labelline invalid" style="display: none;"></div>
+    <!-- ======================================== -->
 </div>
 
 <style>
     .entryarea {
+        display: flex;
         position: relative;
         height: fit-content;
         width: 524px;
+        height: 70px;
     }
 
     input {
@@ -63,18 +103,23 @@
         transition: 0.1s ease;
         padding: 24px 42px;
     }
+
+    .input.focus {
+        border-color: #00bca1;
+    }
+
+    .input.valid {
+        color: #616163;
+        border-color: #00bca1;
+    }
     input:-webkit-autofill {
         -webkit-box-shadow: 0 0 0px 1000px white inset;
     }
-    .input.error {
-        border-color: #ff0000; /* Красный цвет границы */
-        color: #ff0000; /* Красный текст */
+    .input.invalid {
+        border: 1px solid red;
     }
-    .input-error {
-        position: absolute;
-        top: 50%;
-        right: -32px;
-        transform: translateY(-50%);
+    .labelline.invalid {
+        color: red;
     }
 
     .pass-show {
@@ -108,21 +153,36 @@
 
     input:focus,
     input:valid {
-        color: #616163;
         border-color: #00bca1;
     }
 
-    input:focus + .labelline,
-    input:valid + .labelline {
+    input:focus + .labelline {
         top: 0;
-        transform: translateY(-35%);
+        transform: translateY(-35%) translateX(26px);
         color: #00bca1;
         background-color: white;
         padding: 0 10px;
     }
 
+    /* .up {
+        top: 0;
+        transform: translateY(-35%) translateX(26px);
+        color: #00bca1;
+        background-color: white;
+        padding: 0 10px;
+    } */
+
+    .labelline.focus {
+        top: 0 !important;
+        transform: translateY(-35%) translateX(26px) !important;
+        color: #00bca1 !important;
+        background-color: white !important;
+        padding: 0 10px !important;
+    }
+
     @media (max-width: 1440px) {
         .entryarea {
+            height: 50px;
             width: 100%;
         }
 
@@ -138,14 +198,14 @@
             font-size: 13px;
             padding: 0 10px;
             top: 50%;
-            transform: translateY(-25%);
+            transform: translateY(-50%);
         }
 
         .pass-show {
             right: 10px;
             width: 25px;
             height: 25px;
-            transform: translateY(-38%);
+            transform: translateY(-50%);
         }
         .pass-show img {
             width: 25px;
@@ -162,10 +222,18 @@
         input:focus + .labelline,
         input:valid + .labelline {
             top: 0;
-            transform: translateX(10px);
+            transform: translateX(10px) translateY(-50%);
             color: #00bca1;
             background-color: white;
             padding: 0 10px;
+        }
+
+        .labelline.focus {
+            top: 0 !important;
+            transform: translateY(-50%) translateX(10px) !important;
+            color: #00bca1 !important;
+            background-color: white !important;
+            padding: 0 10px !important;
         }
     }
 
@@ -185,34 +253,34 @@
             font-size: 13px;
             padding: 0 10px;
             top: 50%;
-            transform: translateY(-25%);
+            transform: translateY(-50%);
         }
 
         .pass-show {
             right: 10px;
             width: 25px;
             height: 25px;
-            transform: translateY(-38%);
+            transform: translateY(-50%);
         }
         .pass-show img {
             width: 25px;
             height: 25px;
         }
 
-        .input-error {
-            right: -20px;
-            width: 12px;
-            height: 12px;
-            top: 55%;
-        }
-
         input:focus + .labelline,
         input:valid + .labelline {
             top: 0;
-            transform: translateX(10px);
+            transform: translateX(10px) translateY(-50%);
             color: #00bca1;
             background-color: white;
             padding: 0 10px;
+        }
+        .labelline.focus {
+            top: 0 !important;
+            transform: translateY(-50%) translateX(10px) !important;
+            color: #00bca1 !important;
+            background-color: white !important;
+            padding: 0 10px !important;
         }
     }
 </style>

@@ -27,7 +27,7 @@
                 />
             </div>
             <div class="reset-password">
-                <a href="/recover" class=""> Passwort vergessen?</a>
+                <a href="reset" class=""> Passwort vergessen?</a>
             </div>
             <Button buttonText="Weiter" buttonType="submit" onClick="" />
             <p class="register-link">
@@ -65,7 +65,7 @@
         font-size: 16px;
         text-align: start;
         font-weight: 400;
-        cursor: pointer;
+        cursor: default;
         text-align: start;
         color: #616163;
         text-decoration: underline;

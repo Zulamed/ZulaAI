@@ -23,20 +23,22 @@
 
 <style>
     .default-button {
+        font-family: "Montserrat", sans-serif;
         font-size: 20px;
         font-weight: 400;
         color: var(--color-primary);
         background-color: var(--color-secondary);
-        padding: 16px 0;
+        padding: 16px 20px;
         border-radius: 8px;
-        width: 240px;
+        min-width: 240px;
+        white-space: nowrap;
         text-align: center;
         cursor: pointer;
         border: 1px solid var(--color-secondary);
     }
 
     .default-button:hover {
-        background-color: var(--color-secondary-hover);
+        background-color: red;
     }
 
     @media (max-width: 1440px) {
@@ -52,6 +54,7 @@
         .default-button {
             font-size: 18px;
             padding: 15px 0;
+            width: 167px;
         }
     }
 
@@ -59,7 +62,7 @@
         .default-button {
             font-size: 18px;
             padding: 15px 0;
-            width: 176px;
+            width: 109px;
         }
     }
 </style>

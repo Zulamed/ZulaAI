@@ -79,7 +79,7 @@
     select:focus ~ .labelline,
     select:valid ~ .labelline {
         top: 0;
-        transform: translateY(-35%);
+        transform: translateY(-35%) translateX(26px);
         color: #00bca1;
         background-color: white;
         padding: 0 10px;

@@ -1,85 +1,93 @@
 <script>
     import Button from "../components/button.svelte";
     import Input from "../components/input.svelte";
-    import Select from "../components/select.svelte";
-    import { writable } from "svelte/store";
+    import DateInput from "./dateInput.svelte";
+    import SelectInput from "./selectInput.svelte";
+    import { firstStep, secondStep, thirdStep } from "./store";
 
-    export let currentStep = writable(1);
+    export let currentStep = 1;
 
-    const nextStep = () => {
-        currentStep.update((step) => step + 1);
-    };
+    function nextStep() {
+        currentStep++;
+    }
 
-    const prevStep = () => {
-        currentStep.update((step) => step - 1);
-    };
+    function prevStep() {
+        currentStep--;
+    }
 </script>
 
-{#if $currentStep == 1}
+{#if currentStep == 1}
     <!-- Форма для первого этапа -->
     <div class="input-wrapper">
         <Input
             inputType="email"
             inputPlaceholder="E-Mail-Adresse"
             inputId="email"
+            value={firstStep.email}
         />
         <Input
             inputType="password"
             inputPlaceholder="Passwort"
             inputId="password"
             btnDisplay="block"
+            value={firstStep.password}
         />
         <Input
             inputType="password"
             inputPlaceholder="Passwort wiederholen"
             inputId="password-repeat"
             btnDisplay="block"
+            value={firstStep.passwordConfirmation}
         />
     </div>
 
     <Button buttonText="Weiter" onClick={nextStep} buttonType="button" />
-{:else if $currentStep == 2}
+{:else if currentStep == 2}
     <div class="input-wrapper">
-        <Input inputType="text" inputPlaceholder="Vorname" inputId="vorname" />
+        <Input
+            inputType="text"
+            inputPlaceholder="Vorname"
+            inputId="vorname"
+            value={secondStep.vorname}
+        />
         <Input
             inputType="text"
             inputPlaceholder="Nachname"
             inputId="nachname"
+            value={secondStep.nachname}
         />
-        <Input
-            inputType="text"
-            inputPlaceholder="Geburtsdatum"
-            inputId="geburtsdatum"
-        />
+        <DateInput value={secondStep.date} />
     </div>
     <div class="button-group">
         <Button
             buttonTextColor="var(--color-secondary)"
-            buttonBgColor="transparent"
+            buttonBgColor="var(--color-primary)"
             buttonText="Zurück"
             onClick={prevStep}
             buttonType="button"
         />
         <Button buttonText="Weiter" onClick={nextStep} buttonType="button" />
     </div>
-{:else if $currentStep == 3}
+{:else if currentStep == 3}
     <div class="input-wrapper">
         <Input
             inputType="text"
             inputPlaceholder="Universität"
             inputId="university"
+            value={thirdStep.university}
         />
-        <Select />
+        <SelectInput selected={thirdStep.semester} />
         <Input
             inputType="text"
             inputPlaceholder="Wunschfach"
             inputId="wunschfach"
+            value={thirdStep.wunschfach}
         />
     </div>
     <div class="button-group">
         <Button
             buttonTextColor="var(--color-secondary)"
-            buttonBgColor="transparent"
+            buttonBgColor="var(--color-primary)"
             buttonText="Weiter"
             onClick={prevStep}
             buttonType="button"
@@ -105,9 +113,18 @@
     @media (max-width: 1440px) {
         .input-wrapper {
             gap: 26px;
-            width: 384px;
+            width: 423px;
         }
     }
+
+    @media (max-width: 768px) {
+        .input-wrapper {
+            width: 100%;
+            gap: 26px;
+            margin-bottom: 24px;
+        }
+    }
+
     @media (max-width: 425px) {
         .input-wrapper {
             width: 100%;
