@@ -2,6 +2,7 @@
     import Terms from "$lib/components/terms.svelte";
     import Button from "../components/button.svelte";
     import Input from "../components/input.svelte";
+    import { codeConfirmation } from "../components/store";
 </script>
 
 <svelte:head>
@@ -19,9 +20,10 @@
         <form class="form login-form">
             <div class="input-wrapper" style="margin-bottom: 21px;">
                 <Input
-                    inputType="text"
+                    inputType="number"
                     inputPlaceholder="Code eingeben"
                     inputId="confirmation-code"
+                    value={codeConfirmation.code}
                 />
             </div>
             <p class="register-link" style="margin-top: 0;">

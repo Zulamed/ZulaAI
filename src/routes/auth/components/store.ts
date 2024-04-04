@@ -13,6 +13,24 @@ import type { Selected } from "bits-ui";
 
 
 
+
+export const login = {
+    email: writable(""),
+    password: writable("")
+};
+export const resetPass = {
+    email: writable(""),
+};
+
+export const codeConfirmation = {
+    code: writable(""),
+};
+
+export const newPassword = {
+    password: writable(""),
+    passwordConfirmation: writable("")
+};
+
 export const firstStep = {
     email: writable(""),
     password: writable(""),

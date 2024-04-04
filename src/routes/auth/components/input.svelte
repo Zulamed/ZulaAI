@@ -9,6 +9,7 @@
     export let isValid = true;
     export let value: Writable<string>;
 
+    // NEED FIXING!!!
     function showPassword() {
         const input = document.getElementById(inputId) as HTMLInputElement;
         const button = document.querySelector(
@@ -20,14 +21,10 @@
 
         if (input.type === "password") {
             input.type = "text";
+            buttonSvg.src = "/icons/Hide.svg";
         } else {
             input.type = "password";
-        }
-
-        if (input.type === "password") {
-            buttonSvg.src = "/icons/View25.svg";
-        } else {
-            buttonSvg.src = "/icons/View_hide.svg";
+            buttonSvg.src = "/icons/View.svg";
         }
         isValid = input.checkValidity();
     }
@@ -35,11 +32,6 @@
     let isEmpty = true;
 
     function onInput(e: Event) {
-        // if (e.target.value.trim() !== "") {
-        //     isEmpty = false;
-        // } else {
-        //     isEmpty = true;
-        // }
         let target = e.target as HTMLInputElement;
         isEmpty = target.value.trim() === "";
         $value = target.value;
@@ -65,14 +57,14 @@
     <label for={inputId} class="labelline" class:focus={!isEmpty}
         >{inputPlaceholder}</label
     >
+
     <button
         on:click={showPassword}
         type="button"
         style="display: {btnDisplay};"
         class="pass-show"
-        ><img class="pass-show-svg" src="/icons/View25.svg" alt="" /></button
+        ><img class="pass-show-svg" src="/icons/View.svg" alt="" /></button
     >
-    <!-- <img class="input-error" src="/icons/Frame.svg" alt="" /> -->
 
     <!-- ======================================== -->
     <div class="labelline focus" style="display: none;"></div>
@@ -83,6 +75,15 @@
 </div>
 
 <style>
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type="number"] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
     .entryarea {
         display: flex;
         position: relative;
@@ -114,12 +115,6 @@
     }
     input:-webkit-autofill {
         -webkit-box-shadow: 0 0 0px 1000px white inset;
-    }
-    .input.invalid {
-        border: 1px solid red;
-    }
-    .labelline.invalid {
-        color: red;
     }
 
     .pass-show {
@@ -158,15 +153,39 @@
 
     input:focus + .labelline {
         top: 0;
-        transform: translateY(-35%) translateX(26px);
+        transform: translateY(-50%) translateX(26px);
         color: #00bca1;
+        background-color: white;
+        padding: 0 10px;
+    }
+
+    input[type="number"]:user-invalid {
+        border: 1px solid red;
+    }
+
+    input[type="number"]:user-invalid + .labelline {
+        top: 0;
+        transform: translateY(-50%) translateX(26px);
+        color: red;
+        background-color: white;
+        padding: 0 10px;
+    }
+
+    input[type="email"]:user-invalid {
+        border: 1px solid red;
+    }
+
+    input[type="email"]:user-invalid + .labelline {
+        top: 0;
+        transform: translateY(-50%) translateX(26px);
+        color: red;
         background-color: white;
         padding: 0 10px;
     }
 
     /* .up {
         top: 0;
-        transform: translateY(-35%) translateX(26px);
+        transform: translateY(-50%) translateX(26px);
         color: #00bca1;
         background-color: white;
         padding: 0 10px;
@@ -174,7 +193,7 @@
 
     .labelline.focus {
         top: 0 !important;
-        transform: translateY(-35%) translateX(26px) !important;
+        transform: translateY(-50%) translateX(26px) !important;
         color: #00bca1 !important;
         background-color: white !important;
         padding: 0 10px !important;
@@ -210,13 +229,6 @@
         .pass-show img {
             width: 25px;
             height: 25px;
-        }
-
-        .input-error {
-            right: -20px;
-            width: 12px;
-            height: 12px;
-            top: 55%;
         }
 
         input:focus + .labelline,

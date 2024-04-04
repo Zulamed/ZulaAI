@@ -17,7 +17,6 @@
 </script>
 
 {#if currentStep == 1}
-    <!-- Форма для первого этапа -->
     <div class="input-wrapper">
         <Input
             inputType="email"

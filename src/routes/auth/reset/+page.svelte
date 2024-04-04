@@ -2,6 +2,7 @@
     import Terms from "$lib/components/terms.svelte";
     import Button from "../components/button.svelte";
     import Input from "../components/input.svelte";
+    import { resetPass } from "../components/store";
 </script>
 
 <svelte:head>
@@ -18,6 +19,7 @@
                     inputType="email"
                     inputPlaceholder="E-Mail-Adresse"
                     inputId="email"
+                    value={resetPass.email}
                 />
             </div>
 
