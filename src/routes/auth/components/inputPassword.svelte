@@ -3,37 +3,52 @@
     import type { Writable } from "svelte/store";
 
     export let inputId = "input";
-    export let inputType = "text";
     export let inputPlaceholder = "Placeholder";
     export let value: Writable<string>;
 
     let isEmpty = true;
+    let passwordVisible = false;
+
+    const showPassword = () => {
+        passwordVisible = !passwordVisible;
+        const input = document.getElementById(inputId) as HTMLInputElement;
+        if (input) {
+            input.type = passwordVisible ? "text" : "password";
+        }
+    };
+
+    onMount(() => {
+        const input = document.getElementById(inputId) as HTMLInputElement;
+        input.value = $value;
+        isEmpty = input.value.trim() === "";
+        if (input) {
+            input.type = "password";
+        }
+    });
 
     function onInput(e: Event) {
         let target = e.target as HTMLInputElement;
         isEmpty = target.value.trim() === "";
         $value = target.value;
     }
-
-    let inputElement: HTMLInputElement;
-    onMount(() => {
-        inputElement.value = $value;
-        isEmpty = inputElement.value.trim() === "";
-    });
 </script>
 
 <div class="entryarea">
     <input
-        id={inputId}
-        type={inputType}
-        class:input={true}
         on:input={onInput}
-        class:focus={!isEmpty}
-        bind:this={inputElement}
+        id={inputId}
+        class:input={true}
+        type="password"
         required
     />
-    <label for={inputId} class="labelline" class:focus={!isEmpty}
-        >{inputPlaceholder}</label
+    <label for={inputId} class="labelline">{inputPlaceholder}</label>
+
+    <button on:click={showPassword} type="button" class="pass-show"
+        ><img
+            class="pass-show-svg"
+            src="/icons/{passwordVisible ? 'Hide' : 'Show'}.svg"
+            alt=""
+        /></button
     >
 
     <!-- ======================================== -->
@@ -45,15 +60,6 @@
 </div>
 
 <style>
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-    input[type="number"] {
-        -moz-appearance: textfield;
-        appearance: textfield;
-    }
     .entryarea {
         display: flex;
         position: relative;
@@ -99,7 +105,10 @@
         padding: 0;
         margin: 0;
     }
-
+    .pass-show img {
+        width: 25px;
+        height: 25px;
+    }
     .labelline {
         position: absolute;
         top: 50%;
@@ -121,45 +130,14 @@
         border-color: #00bca1;
     }
 
-    input:focus + .labelline {
+    input:focus + .labelline,
+    input:valid + .labelline {
         top: 0;
         transform: translateY(-50%) translateX(26px);
         color: #00bca1;
         background-color: white;
         padding: 0 10px;
     }
-
-    input[type="number"]:user-invalid {
-        border: 1px solid red;
-    }
-
-    input[type="number"]:user-invalid + .labelline {
-        top: 0;
-        transform: translateY(-50%) translateX(26px);
-        color: red;
-        background-color: white;
-        padding: 0 10px;
-    }
-
-    input[type="email"]:user-invalid {
-        border: 1px solid red;
-    }
-
-    input[type="email"]:user-invalid + .labelline {
-        top: 0;
-        transform: translateY(-50%) translateX(26px);
-        color: red;
-        background-color: white;
-        padding: 0 10px;
-    }
-
-    /* .up {
-        top: 0;
-        transform: translateY(-50%) translateX(26px);
-        color: #00bca1;
-        background-color: white;
-        padding: 0 10px;
-    } */
 
     .labelline.focus {
         top: 0 !important;

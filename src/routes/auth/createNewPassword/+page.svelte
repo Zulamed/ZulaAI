@@ -20,7 +20,6 @@
                     inputPlaceholder="Neues Passwort"
                     inputId="new-password"
                     value={newPassword.password}
-                    btnDisplay="block"
                 />
             </div>
             <div class="input-wrapper" style="margin-bottom: 21px;">
@@ -29,7 +28,6 @@
                     inputPlaceholder="Passwort erneut eingeben"
                     inputId="confirm-new-password"
                     value={newPassword.passwordConfirmation}
-                    btnDisplay="block"
                 />
             </div>
 

@@ -1,6 +1,7 @@
 <script>
     import Button from "../components/button.svelte";
     import Input from "../components/input.svelte";
+    import InputPassword from "./inputPassword.svelte";
     import DateInput from "./dateInput.svelte";
     import SelectInput from "./selectInput.svelte";
     import { firstStep, secondStep, thirdStep } from "./store";
@@ -24,18 +25,14 @@
             inputId="email"
             value={firstStep.email}
         />
-        <Input
-            inputType="password"
+        <InputPassword
             inputPlaceholder="Passwort"
             inputId="password"
-            btnDisplay="block"
             value={firstStep.password}
         />
-        <Input
-            inputType="password"
+        <InputPassword
             inputPlaceholder="Passwort wiederholen"
             inputId="password-repeat"
-            btnDisplay="block"
             value={firstStep.passwordConfirmation}
         />
     </div>

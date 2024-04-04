@@ -14,31 +14,6 @@
         <h1 class="home-title">Profil erstellen</h1>
         <p class="subtitle">Registrieren Sie sich um ZulaMed zu nutzen</p>
         <form class="form login-form">
-            <!-- <div class="input-wrapper">
-                <Input
-                    inputType="email"
-                    inputPlaceholder="E-Mail-Adresse"
-                    inputId="email"
-                />
-                <Input
-                    inputType="password"
-                    inputPlaceholder="Passwort"
-                    inputId="password"
-                    btnDisplay="block"
-                />
-                <Input
-                    inputType="password"
-                    inputPlaceholder="Passwort wiederholen"
-                    inputId="password-repeat"
-                    btnDisplay="block"
-                />
-            </div>
-
-            <Button buttonText="Weiter" buttonType="submit" />
-            <p class="register-link">
-                Sie haben einen Account? <a href="/register">Klicken Sie hier</a
-                >
-            </p> -->
             <RegistrationForm />
             <p class="register-link">
                 Sie haben einen Account? <a href="login">Klicken Sie hier</a>

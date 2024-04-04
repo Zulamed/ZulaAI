@@ -3,6 +3,7 @@
     import Button from "../components/button.svelte";
     import Input from "../components/input.svelte";
     import { login } from "../components/store";
+    import InputPassword from "../components/inputPassword.svelte";
 </script>
 
 <svelte:head>
@@ -21,11 +22,9 @@
                     inputId="email"
                     value={login.email}
                 />
-                <Input
-                    inputType="password"
+                <InputPassword
                     inputPlaceholder="Passwort"
                     inputId="password"
-                    btnDisplay="block"
                     value={login.password}
                 />
             </div>
