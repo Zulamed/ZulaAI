@@ -45,7 +45,9 @@
         bind:this={inputElement}
         required
     />
-    <label for={inputId} class="labelline">{inputPlaceholder}</label>
+    <label for={inputId} class:focus={!isEmpty} class="labelline"
+        >{inputPlaceholder}</label
+    >
 
     <!-- ======================================== -->
     <div class="labelline focus" style="display: none;"></div>
@@ -138,7 +140,7 @@
 
     input:focus + .labelline {
         top: 0;
-        transform: translateY(-50%) translateX(26px);
+        transform: translateY(-50%) translateX(10px);
         color: #00bca1;
         background-color: white;
         padding: 0 10px;
@@ -150,7 +152,7 @@
 
     input[type="number"]:user-invalid + .labelline {
         top: 0;
-        transform: translateY(-50%) translateX(26px);
+        transform: translateY(-50%) translateX(10px);
         color: red;
         background-color: white;
         padding: 0 10px;
@@ -162,7 +164,7 @@
 
     input[type="email"]:user-invalid + .labelline {
         top: 0;
-        transform: translateY(-50%) translateX(26px);
+        transform: translateY(-50%) translateX(10px);
         color: red;
         background-color: white;
         padding: 0 10px;
@@ -170,7 +172,7 @@
 
     .labelline.focus {
         top: 0;
-        transform: translateY(-50%) translateX(26px);
+        transform: translateY(-50%) translateX(10px);
         color: #00bca1;
         background-color: white;
         padding: 0 10px;
@@ -178,7 +180,7 @@
 
     .labelline.invalid {
         top: 0 !important;
-        transform: translateY(-50%) translateX(26px) !important;
+        transform: translateY(-50%) translateX(10px) !important;
         color: red !important;
         background-color: white !important;
         padding: 0 10px !important;

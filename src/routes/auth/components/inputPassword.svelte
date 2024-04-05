@@ -68,6 +68,14 @@
         height: 70px;
     }
 
+    .entryarea input.invalid {
+        border-color: #ff0000;
+    }
+
+    .entryarea input.invalid + .labelline {
+        color: #ff0000;
+    }
+
     input {
         font-family: "Montserrat", sans-serif;
         width: 100%;

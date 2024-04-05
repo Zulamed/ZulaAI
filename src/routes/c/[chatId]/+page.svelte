@@ -1,43 +1,112 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+    import { writable } from "svelte/store";
+
     let inputValue = "";
+    let textareaHeight = writable<number>(0);
 
     type Message = {
         text: string;
         time: string;
         sender: string;
+        senderImg: string;
         isUser: boolean;
     };
 
     let messages: Message[] = [
-        // {
-        //     isUser: false,
-        //     sender: "Patient",
-        //     time: "9:34 pm",
-        //     text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
-        // },
-        // {
-        //     isUser: true,
-        //     sender: "You",
-        //     time: "9:19 pm",
-        //     text: `123`,
-        // },
+        {
+            isUser: false,
+            sender: "Patient",
+            senderImg: "/icons/user.jpg",
+            time: "9:34 pm",
+            text: `Test message. Need an API to work correctly.`,
+        },
     ];
 
     function addMessage() {
         messages.push({
             isUser: true,
             sender: "You",
+            senderImg: "/icons/user.jpg",
             time: new Date().toLocaleTimeString(),
             text: inputValue,
         });
         messages = messages;
 
         inputValue = "";
+        textareaHeight.set(0);
+
+        const textarea = document.getElementById(
+            "chat-input",
+        ) as HTMLTextAreaElement;
+        if (window.innerWidth > 1280) {
+            textarea.style.height = "80px";
+        } else {
+            textarea.style.height = "54px";
+        }
     }
+
+    onMount(() => {
+        const textarea = document.getElementById(
+            "chat-input",
+        ) as HTMLTextAreaElement;
+
+        textarea.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault(); // Предотвращаем перенос строки
+                if (inputValue.trim() !== "") {
+                    addMessage(); // Вызываем функцию для отправки сообщения
+                }
+            } else if (event.key === "Enter" && event.shiftKey) {
+                // Нажатие Shift + Enter
+                // Проверяем, есть ли уже текст в textarea
+                const textBefore = inputValue.substring(
+                    0,
+                    textarea.selectionStart,
+                );
+                const textAfter = inputValue.substring(textarea.selectionEnd);
+                const cursorPosition = textarea.selectionStart;
+                if (textBefore.trim() === "" && textAfter.trim() === "") {
+                    textarea.selectionStart = cursorPosition + 1;
+                    textarea.selectionEnd = cursorPosition + 1;
+                } else {
+                    textarea.selectionStart = cursorPosition + 1;
+                    textarea.selectionEnd = cursorPosition + 1;
+                }
+                textarea.value = inputValue;
+                textarea.style.height = "auto";
+                textarea.style.height = textarea.scrollHeight + "px";
+            }
+        });
+
+        textarea.addEventListener("input", () => {
+            if (window.innerWidth > 1280) {
+                textarea.style.height = "80px";
+            } else {
+                textarea.style.height = "54px";
+            }
+            textarea.style.height = textarea.scrollHeight + "px";
+        });
+    });
 </script>
 
 <div class="main">
     <div class="header">
+        <a class="btn-back" href="/c">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="29"
+                height="29"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#191616"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-chevron-left"
+                ><path d="m15 18-6-6 6-6" /></svg
+            >
+        </a>
         <a href=".">
             <img
                 src="/logo/Grouplogo2.svg"
@@ -50,14 +119,17 @@
     <div class="chatbox">
         <div class="messages-wrapper">
             <!-- ==========MESSAGE========== -->
-
             {#each messages as message}
                 <div class="message {message.isUser ? 'outgoing' : 'incoming'}">
                     <div
                         class="message-full"
                         style="display: flex; flex-direction: column;"
                     >
-                        <img class="sender-img" src="/icons/user.jpg" alt="" />
+                        <img
+                            class="sender-img"
+                            src={message.senderImg}
+                            alt=""
+                        />
                         <div class="message-info">
                             <h2 class="message-sender">{message.sender}</h2>
                             <span class="message-time">{message.time}</span>
@@ -68,7 +140,29 @@
                     </div>
                 </div>
             {/each}
-            <div class="message incoming">
+            <!-- ==========MESSAGE========== -->
+            <!-- ==========MESSAGE========== -->
+            <div class="message incoming-error">
+                <div
+                    class="message-full"
+                    style="display: flex; flex-direction: column;"
+                >
+                    <img class="sender-img" src="/icons/user.jpg" alt="" />
+                    <div class="message-info">
+                        <h2 class="message-sender">Patient</h2>
+                        <span class="message-time">20:31 am</span>
+                    </div>
+                    <div class="message-content">
+                        <p class="content-text">
+                            Test error message. Need an API to work correctly.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- ==========MESSAGE========== -->
+
+            <!-- ==========MESSAGE========== -->
+            <div class="message incoming-typing">
                 <div
                     class="message-full"
                     style="display: flex; flex-direction: column;"
@@ -98,10 +192,25 @@
                         required
                         id="chat-input"
                         placeholder="Ask your questions"
+                        style="height: {textareaHeight}px;"
                     ></textarea>
                     <button on:click={addMessage} id="sendBtn" class="send-btn"
-                        ><img src="/icons/send.svg" alt="send" /></button
-                    >
+                        ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#A1A1A1"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-send"
+                            ><path d="m22 2-7 20-4-9-9-4Z" /><path
+                                d="M22 2 11 13"
+                            />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -109,6 +218,10 @@
 </div>
 
 <style>
+    .btn-back {
+        display: none;
+    }
+
     .typing-animation {
         display: flex;
         align-items: center;
@@ -176,6 +289,9 @@
         border-radius: 15px;
         background-color: #f5f5f5;
         padding: 16px 42px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
 
     .messages-wrapper {
@@ -218,19 +334,19 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 0 35px;
+        padding: 0 45px;
     }
 
     .message-sender {
-        font-size: 12px;
+        font-size: 16px;
         font-weight: 700;
         color: #1e1f22;
     }
 
     .sender-img {
         position: absolute;
-        width: 31px;
-        height: 31px;
+        width: 45px;
+        height: 45px;
         top: 0;
         border-radius: 8px;
         left: -7px;
@@ -238,22 +354,34 @@
     }
 
     .message-time {
-        font-size: 8px;
+        font-size: 12px;
         font-weight: 400;
         color: #1e1f22;
     }
 
     .message-content {
         background: #fff;
-        padding: 15px 35px;
+        padding: 29px 49px;
         border-radius: 11px;
-        font-size: 13px;
+        font-size: 15px;
         font-weight: 400;
         color: #000000;
     }
 
-    .message.incoming .message-content {
+    .content-text {
+        white-space: pre-wrap;
+        word-break: break-word;
+        line-height: 18.29px;
+    }
+
+    .message.incoming .message-content,
+    .message.incoming-typing .message-content {
         background: #00bca11a;
+        border: 1px solid #00bca1;
+    }
+    .message.incoming-error .message-content {
+        background: #ff00001a;
+        border: 1px solid #ff0000;
     }
     .message.outgoing .message-content {
         background: #fff;
@@ -262,14 +390,11 @@
     /* ===================MESSAGEBOX=================== */
 
     .messagebox-wrapper {
-        position: absolute;
-        bottom: 0;
-        left: 0;
         width: 100%;
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 16px 40px;
+        z-index: 1000;
     }
 
     .message-box {
@@ -279,11 +404,13 @@
         align-items: center;
         gap: 10px;
         border-radius: 12px;
-        padding: 0px 20px;
+        padding: 0;
         background-color: #fff;
+        border: 1px solid #fff;
     }
 
     .typing-textarea {
+        position: relative;
         width: 100%;
         display: flex;
         position: relative;
@@ -291,10 +418,12 @@
     }
     .typing-textarea .send-btn {
         all: unset;
+        position: absolute;
         visibility: hidden;
         cursor: pointer;
         width: 24px;
         height: 24px;
+        right: 20px;
         border-radius: 50%;
         display: flex;
         justify-content: center;
@@ -305,9 +434,14 @@
     .typing-textarea textarea:valid + .send-btn {
         visibility: visible;
     }
+    .message-box:focus-within {
+        border: 1px solid #00bca1;
+    }
 
     .typing-textarea textarea {
+        font-family: "Montserrat";
         width: 100%;
+        max-height: 330px;
         height: 80px;
         border: none;
         outline: none;
@@ -317,10 +451,11 @@
         color: #000;
         padding: 31px 45px 31px 29px;
         border-radius: 12px;
+        white-space: pre-wrap;
     }
 
     .typing-textarea textarea::-webkit-scrollbar {
-        width: 6px;
+        width: 0px;
     }
     .typing-textarea textarea::-webkit-scrollbar-track {
         border-radius: 25px;
@@ -328,11 +463,11 @@
     }
     .typing-textarea textarea::-webkit-scrollbar-thumb {
         border-radius: 25px;
-        background-color: #dcefed;
+        background-color: transparent;
     }
     .typing-textarea textarea {
         scrollbar-width: thin;
-        scrollbar-color: #dcefed transparent;
+        scrollbar-color: transparent transparent;
     }
     .send-btn:hover {
         background-color: #f4f4f4;
@@ -352,7 +487,7 @@
             border: none;
             outline: none;
             resize: none;
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 400;
             color: #000;
             padding: 19px 33px;
@@ -378,6 +513,9 @@
             border-radius: 15px;
             background-color: #f5f5f5;
             padding: 16px 42px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         /* =========header========= */
@@ -403,14 +541,10 @@
         }
 
         .messagebox-wrapper {
-            position: absolute;
-            bottom: 0;
-            left: 0;
             width: 100%;
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 16px 40px;
         }
 
         .message-box {
@@ -445,13 +579,15 @@
         .messages-wrapper {
             width: 100%;
             height: calc(100% - 54px);
-            overflow: scroll;
             display: flex;
             flex-direction: column;
-            padding-bottom: 23px;
+            align-items: end;
+            padding-bottom: 45px;
             align-items: center;
-            justify-content: end;
             gap: 19px;
+            overflow-x: hidden;
+            overflow-y: scroll;
+            scrollbar-width: thin;
         }
 
         .message {
@@ -498,6 +634,118 @@
             font-size: 13px;
             font-weight: 400;
             color: #000000;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .main {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+        }
+
+        .header {
+            height: fit-content;
+            display: flex;
+            align-items: center;
+        }
+
+        .chatbox {
+            height: 100%;
+            padding: 20px 0px;
+            border-radius: 0;
+            background-color: #fff;
+        }
+
+        /* =======message box======= */
+        .message-box {
+            padding: 0;
+        }
+        .messagebox-wrapper {
+            position: fixed;
+            bottom: 12px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 24px 23px;
+            border-top: 1px solid #f5f5f5;
+        }
+
+        .typing-textarea textarea {
+            background-color: #f5f6f5;
+            width: 92%;
+        }
+
+        .message-box:focus-within {
+            border: 1px solid transparent;
+        }
+        .typing-textarea {
+            justify-content: space-between;
+        }
+        .typing-textarea .send-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #9c9c9c;
+            padding: 0;
+            visibility: visible;
+            cursor: not-allowed;
+        }
+        .typing-textarea textarea:valid + .send-btn {
+            background-color: #00bca1;
+        }
+
+        .typing-textarea .send-btn svg {
+            width: 27px;
+            height: 27px;
+            stroke: #fff;
+        }
+
+        .messages-wrapper {
+            padding: 0 25px 45px 25px;
+        }
+
+        .message.outgoing .message-content {
+            background: #f5f5f5;
+        }
+
+        .btn-back {
+            display: block;
+            position: absolute;
+            cursor: pointer;
+            left: 20px;
+        }
+
+        .message-content {
+            border-radius: 15px;
+        }
+        .message.incoming .message-content,
+        .message.incoming-typing .message-content {
+            background: #00bca11a;
+            border: 1px solid transparent;
+        }
+        .sender-img {
+            left: -10px;
+        }
+        .message-info {
+            padding: 0 30px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .typing-textarea textarea {
+            width: 85%;
+        }
+    }
+
+    @media (max-width: 431px) {
+        .typing-textarea textarea {
+            width: 77%;
         }
     }
 </style>

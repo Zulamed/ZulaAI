@@ -47,6 +47,7 @@
             padding: 12px 0;
             width: 194px;
             font-weight: 400;
+            min-width: 200px;
         }
     }
 
@@ -54,6 +55,7 @@
         .default-button {
             font-size: 18px;
             padding: 15px 0;
+            min-width: 109px;
             width: 167px;
         }
     }
@@ -62,7 +64,7 @@
         .default-button {
             font-size: 18px;
             padding: 15px 0;
-            width: 109px;
+            width: 129px;
         }
     }
 </style>
