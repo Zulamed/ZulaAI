@@ -11,10 +11,24 @@
 
     function onInput(e: Event) {
         let target = e.target as HTMLInputElement;
+        let label = document.querySelector(
+            `label[for=${inputId}]`,
+        ) as HTMLLabelElement;
         isEmpty = target.value.trim() === "";
         $value = target.value;
-    }
 
+        if (target.type === "email" && !target.checkValidity()) {
+            target.classList.add("invalid"); // Добавить класс "invalid" к input
+            target.classList.remove("focus"); // Удалить класс "focus" у input
+            label.classList.add("invalid"); // Добавить класс "invalid" к label
+            label.classList.remove("focus"); // Удалить класс "focus" у label
+        } else {
+            target.classList.remove("invalid"); // Удалить класс "invalid" у input
+            target.classList.add("focus"); // Добавить класс "focus" к input
+            label.classList.remove("invalid"); // Удалить класс "invalid" у label
+            label.classList.add("focus"); // Добавить класс "focus" к label
+        }
+    }
     let inputElement: HTMLInputElement;
     onMount(() => {
         inputElement.value = $value;
@@ -28,17 +42,15 @@
         type={inputType}
         class:input={true}
         on:input={onInput}
-        class:focus={!isEmpty}
         bind:this={inputElement}
         required
     />
-    <label for={inputId} class="labelline" class:focus={!isEmpty}
-        >{inputPlaceholder}</label
-    >
+    <label for={inputId} class="labelline">{inputPlaceholder}</label>
 
     <!-- ======================================== -->
     <div class="labelline focus" style="display: none;"></div>
     <div class="input valid" style="display: none;"></div>
+    <div class="input invalid" style="display: none;"></div>
     <div class="input focus" style="display: none;"></div>
     <div class="labelline invalid" style="display: none;"></div>
     <!-- ======================================== -->
@@ -82,6 +94,9 @@
     .input.valid {
         color: #616163;
         border-color: #00bca1;
+    }
+    .input.invalid {
+        border-color: red;
     }
     input:-webkit-autofill {
         -webkit-box-shadow: 0 0 0px 1000px white inset;
@@ -153,18 +168,18 @@
         padding: 0 10px;
     }
 
-    /* .up {
+    .labelline.focus {
         top: 0;
         transform: translateY(-50%) translateX(26px);
         color: #00bca1;
         background-color: white;
         padding: 0 10px;
-    } */
+    }
 
-    .labelline.focus {
+    .labelline.invalid {
         top: 0 !important;
         transform: translateY(-50%) translateX(26px) !important;
-        color: #00bca1 !important;
+        color: red !important;
         background-color: white !important;
         padding: 0 10px !important;
     }
@@ -217,6 +232,13 @@
             background-color: white !important;
             padding: 0 10px !important;
         }
+        input[type="email"]:user-invalid + .labelline {
+            top: 0;
+            transform: translateY(-50%) translateX(10px);
+            color: red;
+            background-color: white;
+            padding: 0 10px;
+        }
     }
 
     @media (max-width: 425px) {
@@ -263,6 +285,13 @@
             color: #00bca1 !important;
             background-color: white !important;
             padding: 0 10px !important;
+        }
+        input[type="email"]:user-invalid + .labelline {
+            top: 0;
+            transform: translateY(-50%) translateX(10px);
+            color: red;
+            background-color: white;
+            padding: 0 10px;
         }
     }
 </style>
