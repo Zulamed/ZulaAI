@@ -21,17 +21,17 @@
         };
     });
 
-    const isMobileStore = readable(isMobile, (set) => {
-        const updateMobileStatus = () => {
-            set(window.innerWidth <= 1024);
-        };
+    // const isMobileStore = readable(isMobile, (set) => {
+    //     const updateMobileStatus = () => {
+    //         set(window.innerWidth <= 1024);
+    //     };
 
-        window.addEventListener("resize", updateMobileStatus);
+    //     window.addEventListener("resize", updateMobileStatus);
 
-        return () => {
-            window.removeEventListener("resize", updateMobileStatus);
-        };
-    });
+    //     return () => {
+    //         window.removeEventListener("resize", updateMobileStatus);
+    //     };
+    // });
 </script>
 
 <svelte:head>
