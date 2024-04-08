@@ -24,11 +24,16 @@
     ];
 
     function addMessage() {
+        const time = new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+        });
         messages.push({
             isUser: true,
             sender: "You",
             senderImg: "/icons/user.jpg",
-            time: new Date().toLocaleTimeString(),
+            time: time,
             text: inputValue,
         });
         messages = messages;
@@ -44,6 +49,12 @@
         } else {
             textarea.style.height = "54px";
         }
+        let messagesWrapper = document.querySelector(
+            ".messages-wrapper",
+        ) as HTMLDivElement;
+        requestAnimationFrame(function () {
+            messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
+        });
     }
 
     onMount(() => {
@@ -53,13 +64,11 @@
 
         textarea.addEventListener("keydown", (event) => {
             if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault(); // Предотвращаем перенос строки
+                event.preventDefault();
                 if (inputValue.trim() !== "") {
-                    addMessage(); // Вызываем функцию для отправки сообщения
+                    addMessage();
                 }
             } else if (event.key === "Enter" && event.shiftKey) {
-                // Нажатие Shift + Enter
-                // Проверяем, есть ли уже текст в textarea
                 const textBefore = inputValue.substring(
                     0,
                     textarea.selectionStart,
@@ -670,6 +679,7 @@
             align-items: center;
             gap: 10px;
             padding: 24px 23px;
+            background: #fff;
             border-top: 1px solid #f5f5f5;
         }
 
@@ -711,7 +721,7 @@
         }
 
         .message.outgoing .message-content {
-            background: #f5f5f5;
+            background: #00bca11a;
         }
 
         .btn-back {
@@ -726,7 +736,7 @@
         }
         .message.incoming .message-content,
         .message.incoming-typing .message-content {
-            background: #00bca11a;
+            background: #f5f5f5;
             border: 1px solid transparent;
         }
         .sender-img {

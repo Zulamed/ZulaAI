@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import Preloader from "$lib/components/preloader.svelte";
+    import Sidebarlinks from "./components/sidebarLinks.svelte";
 
     let isMobile = false;
     let isLoading = true;
@@ -18,6 +19,34 @@
             window.removeEventListener("resize", updateMobileStatus);
         };
     });
+
+    type History = {
+        title: string;
+        time: string;
+        text: string;
+    };
+
+    let history: History[] = [
+        {
+            title: "Patient - Rashid",
+            time: "9:34 pm",
+            text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit ...`,
+        },
+    ];
+
+    function addChat() {
+        const time = new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+        });
+        history.push({
+            title: `New Chat ${history.length + 1}`,
+            time: time,
+            text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit ...`,
+        });
+        history = history;
+    }
 </script>
 
 {#if isLoading}
@@ -26,68 +55,11 @@
     <div class="container">
         {#if !isMobile}
             <div class="sidebar">
-                <div class="sidebar-buttons">
-                    <button class="button-lg active">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#A1A1A1"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="lucide lucide-message-circle"
-                            ><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></svg
-                        >
-                    </button>
-
-                    <button class="button-lg">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#A1A1A1"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="lucide lucide-settings"
-                            ><path
-                                d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
-                            /><circle cx="12" cy="12" r="3" /></svg
-                        >
-                    </button>
-
-                    <button class="button-lg">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="none"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="lucide lucide-log-out"
-                            ><path
-                                d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
-                            /><polyline points="16 17 21 12 16 7" /><line
-                                x1="21"
-                                x2="9"
-                                y1="12"
-                                y2="12"
-                            /></svg
-                        >
-                    </button>
-                </div>
+                <Sidebarlinks />
                 <div class="sidebar-chatlist">
                     <h1 class="chatlist-title">Meine Simulationen</h1>
                     <div class="search-chat-wrapper">
-                        <button class="add-chat"
+                        <button on:click={addChat} class="add-chat"
                             ><img src="/icons/plus.svg" alt="plus" />Neue
                             Simulation</button
                         >
@@ -100,78 +72,16 @@
                     </div>
 
                     <div class="chatlist">
-                        <a href="." class="chatlist-item">
-                            <h2 class="chat-title">Patient - example 1</h2>
-                            <span class="last-update">9:34 pm</span>
-                            <img src="/logo/Mobilelogo.svg" alt="" />
-                            <p class="last-message">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit ...
-                            </p>
-                        </a>
-                        <a href="." class="chatlist-item active">
-                            <h2 class="chat-title">Patient - example 1</h2>
-                            <span class="last-update">9:34 pm</span>
-                            <img src="/logo/Mobilelogo.svg" alt="" />
-                            <p class="last-message">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit ...
-                            </p>
-                        </a>
-                        <a href="." class="chatlist-item">
-                            <h2 class="chat-title">Patient - example 1</h2>
-                            <span class="last-update">9:34 pm</span>
-                            <img src="/logo/Mobilelogo.svg" alt="" />
-                            <p class="last-message">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit ...
-                            </p>
-                        </a>
-                        <a href="." class="chatlist-item">
-                            <h2 class="chat-title">Patient - example 1</h2>
-                            <span class="last-update">9:34 pm</span>
-                            <img src="/logo/Mobilelogo.svg" alt="" />
-                            <p class="last-message">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit ...
-                            </p>
-                        </a>
-                        <a href="." class="chatlist-item">
-                            <h2 class="chat-title">Patient - example 1</h2>
-                            <span class="last-update">9:34 pm</span>
-                            <img src="/logo/Mobilelogo.svg" alt="" />
-                            <p class="last-message">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit ...
-                            </p>
-                        </a>
-                        <a href="." class="chatlist-item">
-                            <h2 class="chat-title">Patient - example 1</h2>
-                            <span class="last-update">9:34 pm</span>
-                            <img src="/logo/Mobilelogo.svg" alt="" />
-                            <p class="last-message">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit ...
-                            </p>
-                        </a>
-                        <a href="." class="chatlist-item">
-                            <h2 class="chat-title">Patient - example 1</h2>
-                            <span class="last-update">9:34 pm</span>
-                            <img src="/logo/Mobilelogo.svg" alt="" />
-                            <p class="last-message">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit ...
-                            </p>
-                        </a>
-                        <a href="." class="chatlist-item">
-                            <h2 class="chat-title">Patient - example 1</h2>
-                            <span class="last-update">9:34 pm</span>
-                            <img src="/logo/Mobilelogo.svg" alt="" />
-                            <p class="last-message">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit ...
-                            </p>
-                        </a>
+                        {#each history as item}
+                            <a href="." class="chatlist-item">
+                                <h2 class="chat-title">{item.title}</h2>
+                                <span class="last-update">{item.time}</span>
+                                <img src="/logo/Mobilelogo.svg" alt="" />
+                                <p class="last-message">
+                                    {item.text}
+                                </p>
+                            </a>
+                        {/each}
                     </div>
                 </div>
             </div>
@@ -334,7 +244,7 @@
     .chatlist {
         width: 100%;
         display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
         gap: 10px;
         padding: 10px 5px 10px 0;
         overflow-y: scroll;
@@ -777,35 +687,9 @@
             width: 100%;
             height: 100dvh;
             padding: 24px 0px 36px 0px;
-            display: block;
-        }
-    }
-
-    @media (max-width: 425px) {
-        .middle-part {
-            margin-bottom: 20px;
-        }
-        .home-title {
-            font-size: 28px;
-        }
-
-        .home-sm-text {
-            font-size: 11px;
-            margin: 0;
-        }
-        .bottom-part {
-            gap: 10px;
-        }
-        .start-btn {
-            font-size: 15px;
-            margin-bottom: 0px;
-        }
-        .menu {
             display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0;
+            flex-direction: column;
+            justify-content: center;
         }
     }
 </style>

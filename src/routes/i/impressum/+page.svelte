@@ -1,0 +1,179 @@
+<script lang="ts">
+    import Terms from "$lib/components/terms.svelte";
+    import { onMount } from "svelte";
+    let previousPage = "";
+
+    onMount(() => {
+        previousPage = document.referrer || "/";
+    });
+
+    function goBack() {
+        history.back();
+    }
+</script>
+
+<div class="container">
+    <div class="top-part">
+        <img class="top-part" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
+    </div>
+    <button on:click={goBack} class="back-btn">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#A1A1A1"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6" /></svg
+        >
+        <span>Zurück</span>
+    </button>
+    <div class="middle-part" style="color: #000;">
+        <h1 class="i-title">Impressum</h1>
+        <p class="i-text">Text here.</p>
+    </div>
+    <Terms textColor="#00BCA1" textDisplay="none" />
+</div>
+
+<style>
+    .container {
+        padding: 80px 334px 63px;
+        width: 100%;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+    }
+
+    .top-part {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: fit-content;
+    }
+
+    .top-part img {
+        width: 317px;
+    }
+
+    .middle-part {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+        height: 100%;
+        padding: 83px 0;
+    }
+
+    .back-btn {
+        all: unset;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 20px;
+        font-weight: 500;
+        color: #a1a1a1;
+        text-decoration: none;
+        cursor: pointer;
+        width: fit-content;
+        margin-top: 18.75px;
+    }
+
+    .back-btn:hover {
+        color: #00bca1;
+    }
+
+    .back-btn:hover svg {
+        stroke: #00bca1;
+    }
+
+    .i-title {
+        font-size: 37px;
+        font-weight: 600;
+        margin-bottom: 44px;
+        color: #616163;
+    }
+
+    .i-text {
+        font-size: 20px;
+        font-weight: 400;
+        color: #616163;
+        text-align: center;
+        line-height: 24.38px;
+    }
+
+    @media (max-width: 1440px) {
+        .container {
+            padding: 39px 236px 39px 236px;
+        }
+
+        .top-part img {
+            width: 164px;
+        }
+
+        .middle-part {
+            padding: 69px 0;
+        }
+
+        .back-btn {
+            font-size: 16px;
+            gap: 12px;
+        }
+
+        .i-title {
+            font-size: 28px;
+        }
+
+        .i-text {
+            font-size: 14px;
+            line-height: 17.07px;
+        }
+    }
+    @media (max-width: 1024px) {
+        .container {
+            padding: 39px 109px 39px 109px;
+        }
+
+        .i-title {
+            font-size: 28px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 127px 36px 153px 36px;
+        }
+
+        .top-part img {
+            width: 174px;
+        }
+
+        .middle-part {
+            padding: 53px 0;
+        }
+
+        .back-btn {
+            font-size: 14px;
+            gap: 8px;
+        }
+
+        .i-title {
+            font-size: 28px;
+        }
+
+        .i-text {
+            font-size: 14px;
+            line-height: 17.07px;
+        }
+    }
+
+    @media (max-width: 425px) {
+        .i-title {
+            font-size: 22px;
+        }
+    }
+</style>

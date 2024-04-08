@@ -1,30 +1,5 @@
 <script lang="ts">
     import Terms from "$lib/components/terms.svelte";
-
-    function termsOpen() {
-        const overlay = document.querySelector(".overlay-terms") as HTMLElement;
-        overlay.style.display = "block";
-    }
-
-    function termsClose() {
-        const overlay = document.querySelector(".overlay-terms") as HTMLElement;
-        overlay.style.display = "none";
-    }
-
-    function policyOpen() {
-        const overlay = document.querySelector(
-            ".overlay-policy",
-        ) as HTMLElement;
-
-        overlay.style.display = "block";
-    }
-
-    function policyClose() {
-        const overlay = document.querySelector(
-            ".overlay-policy",
-        ) as HTMLElement;
-        overlay.style.display = "none";
-    }
 </script>
 
 <svelte:head>
