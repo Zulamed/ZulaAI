@@ -92,9 +92,14 @@
             font-weight: 400;
         }
     }
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         .container {
-            padding: 127px 40px 192px 40px;
+            padding: 36px 0px !important;
+            width: 100%;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .top-part {
@@ -120,10 +125,6 @@
         }
     }
     @media (max-width: 425px) {
-        .container {
-            padding: 127px 40px 192px 40px;
-        }
-
         .top-part {
             width: 174px;
         }

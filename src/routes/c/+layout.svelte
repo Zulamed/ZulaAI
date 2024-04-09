@@ -2,6 +2,8 @@
     import { onMount } from "svelte";
     import Preloader from "$lib/components/preloader.svelte";
     import Sidebarlinks from "./components/sidebarLinks.svelte";
+    import { needsPaddingChangedForMobile } from "./store";
+    import { page } from "$app/stores";
 
     let isMobile = false;
     let isLoading = true;
@@ -47,19 +49,27 @@
         });
         history = history;
     }
+
+    function closeChatlist() {
+        const chatlist = document.querySelector(
+            ".sidebar-chatlist",
+        ) as HTMLDivElement;
+        chatlist.style.left = "-100%";
+    }
 </script>
 
 {#if isLoading}
     <Preloader />
 {:else}
-    <div class="container">
-        {#if !isMobile}
-            <div class="sidebar">
-                <Sidebarlinks />
-                <div class="sidebar-chatlist">
+    <div class="container" class:mobile-padding={$needsPaddingChangedForMobile}>
+        <div class="sidebar">
+            <Sidebarlinks />
+
+            <div class="sidebar-chatlist">
+                {#if $page.url.pathname === "/c" || $page.url.pathname === "/c/chatId" || $page.url.pathname === "/c/settings"}
                     <h1 class="chatlist-title">Meine Simulationen</h1>
                     <div class="search-chat-wrapper">
-                        <button on:click={addChat} class="add-chat"
+                        <button on:click={addChat} class="sidebar-lg-button"
                             ><img src="/icons/plus.svg" alt="plus" />Neue
                             Simulation</button
                         >
@@ -72,25 +82,79 @@
                     </div>
 
                     <div class="chatlist">
+                        <div class="chatlist-header">
+                            <button on:click={closeChatlist} class="btn-back">
+                                <img src="/icons/back.svg" alt="Back" />
+                            </button>
+                            <img
+                                src="/logo/Grouplogo2.svg"
+                                alt="Zulamed"
+                                class="logo"
+                            />
+                        </div>
                         {#each history as item}
                             <a href="." class="chatlist-item">
                                 <h2 class="chat-title">{item.title}</h2>
                                 <span class="last-update">{item.time}</span>
-                                <img src="/logo/Mobilelogo.svg" alt="" />
+                                <img src="/logo/Mobilelogo.webp" alt="" />
                                 <p class="last-message">
                                     {item.text}
                                 </p>
                             </a>
                         {/each}
                     </div>
-                </div>
+                {:else}
+                    <h1 class="chatlist-title">Einstellungen</h1>
+                    <div class="search-chat-wrapper">
+                        <button on:click={addChat} class="sidebar-lg-button"
+                            ><img src="/icons/user.svg" alt="user" />Persönliche
+                            daten</button
+                        >
+                    </div>
+                {/if}
             </div>
-        {/if}
-        <slot />
+        </div>
+        <div class="main-side">
+            {#if $page.url.pathname === "/c/chatId" && isMobile}
+                <div style="display: none;" />
+            {:else}
+                <div class="header">
+                    <a href=".">
+                        <img
+                            src="/logo/Grouplogo2.svg"
+                            class="logotype"
+                            alt="ZulaMed"
+                        />
+                    </a>
+                </div>
+            {/if}
+            <slot />
+        </div>
     </div>
 {/if}
 
 <style>
+    /* ========HEADER======== */
+
+    .mobile-padding {
+        padding: 36px 0px !important;
+    }
+
+    .main-side {
+        width: 100%;
+    }
+    .header {
+        width: 100%;
+        height: 93px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .header .logotype {
+        width: 317px;
+    }
+
     /* ========SCROLL BAR======== */
 
     .chatlist::-webkit-scrollbar {
@@ -123,45 +187,6 @@
         display: flex;
     }
 
-    .sidebar .sidebar-buttons {
-        height: 100%;
-        width: 15%;
-        border-right: 1px solid #eaeaea;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 25px;
-        padding: 235px 0 0 0;
-    }
-
-    .button-lg {
-        all: unset;
-        width: 46px;
-        height: 46px;
-        cursor: pointer;
-        border-radius: 9px;
-        background: #f9f9f9;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .button-lg:hover {
-        background: #f1f1f1;
-    }
-    .button-lg.active {
-        background: #00bca1;
-    }
-
-    .button-lg.active svg {
-        stroke: #fff;
-    }
-
-    .button-lg svg {
-        width: 33px;
-        height: 33px;
-        stroke: #00bca1;
-    }
-
     .sidebar .sidebar-chatlist {
         height: 100%;
         width: 85%;
@@ -180,14 +205,17 @@
         color: #000;
         padding: 0 0 0 20px;
     }
+    .chatlist-header {
+        display: none;
+    }
 
-    .add-chat {
+    .sidebar-lg-button {
         all: unset;
         cursor: pointer;
         display: flex;
         width: 100%;
         align-items: center;
-        gap: 7px;
+        gap: 22px;
         padding: 14px 24px;
         color: #00bca1;
         border: 1px solid #00bca1;
@@ -197,7 +225,7 @@
         line-height: 27px;
     }
 
-    .add-chat:hover {
+    .sidebar-lg-button:hover {
         background-color: #f1f1f1;
     }
 
@@ -271,17 +299,8 @@
         color: #000;
     }
 
-    .chatlist-item.active {
-        background-color: #00bca11a;
-        border: 1px solid #00bca11a;
-    }
-
     .chatlist-item:hover {
         background-color: #f4f4f4;
-    }
-
-    .chatlist-item.active:hover {
-        background-color: #00bca11a;
     }
 
     .chatlist-item img {
@@ -313,156 +332,30 @@
         color: #1e1f22;
     }
 
-    /* =========header========= */
-
-    .main {
-        width: 70%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        padding: 0 17px 22px 0;
-    }
-
-    .header {
-        width: 100%;
-        height: 93px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .chatbox-logo {
-        width: 300px;
-    }
-
-    /* =========chatbox start page========= */
-
-    .start-screen {
-        width: 100%;
-        background: #f5f5f5;
-        border-radius: 15px;
-        height: calc(100% - 54px);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .top-part img {
-        width: 187px;
-    }
-
-    .middle-part {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .middle-part-text {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 26px;
-    }
-
-    .home-title {
-        font-size: 34px;
-        font-weight: 700;
-        color: #000;
-        margin-top: 0px;
-    }
-
-    .home-title-2 {
-        font-size: 33px;
-        font-weight: 700;
-        color: #00bca1;
-    }
-
-    .home-sm-text {
-        text-align: center;
-        font-size: 16px;
-        font-weight: 400;
-        color: #000;
-    }
-
-    .start-btn {
-        font-size: 18px;
-        font-weight: 400;
-        color: #fff;
-        background-color: #00bca1;
-        padding: 15px 21px;
-        border-radius: 8px;
-        margin-top: 36px;
-        margin-bottom: 50px;
-        text-align: center;
-        width: fit-content;
-    }
-
-    .start-btn:hover {
-        background-color: #00a88f;
-    }
-
-    .bottom-part {
-        display: flex;
-        flex-direction: column;
-        height: 130px;
-        justify-content: space-between;
-    }
-
-    .menu {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        gap: 35px;
-    }
-
-    .menu .menu-btn {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 11px;
-        text-decoration: none;
-        color: #000;
-        font-size: 10px;
-        font-weight: 400;
-    }
-
-    @media (max-width: 1280px) {
+    @media (max-width: 1440px) {
         .container {
             width: 100%;
             height: 100vh;
             display: flex;
         }
         .sidebar {
-            width: 30%;
+            width: 35%;
             height: 100%;
             display: flex;
         }
-        .sidebar .sidebar-buttons {
-            height: 100%;
-            width: 15%;
-            border-right: 1px solid #eaeaea;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 25px;
-            padding: 149px 0 0 0;
+
+        /* HEADER */
+
+        .header {
+            height: 54px;
         }
-        .button-lg {
-            all: unset;
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 9px;
+
+        .header .logotype {
+            width: 164px;
         }
-        .button-lg svg {
-            width: 23px;
-            height: 23px;
-        }
+
+        /* HEADER */
+
         .sidebar .sidebar-chatlist {
             height: 100%;
             width: 85%;
@@ -482,7 +375,7 @@
             padding: 0 0 0 20px;
         }
 
-        .add-chat {
+        .sidebar-lg-button {
             all: unset;
             cursor: pointer;
             display: flex;
@@ -497,7 +390,7 @@
             font-weight: 500;
             line-height: 27px;
         }
-        .add-chat:hover {
+        .sidebar-lg-button:hover {
             background-color: #f1f1f1;
         }
 
@@ -551,16 +444,9 @@
             cursor: pointer;
             color: #000;
         }
-        .chatlist-item.active {
-            background-color: #00bca11a;
-            border: 1px solid #00bca11a;
-        }
+
         .chatlist-item:hover {
             background-color: #f4f4f4;
-        }
-
-        .chatlist-item.active:hover {
-            background-color: #00bca11a;
         }
 
         .chatlist-item img {
@@ -591,105 +477,70 @@
             font-weight: 400;
             color: #1e1f22;
         }
-
-        /* =========header========= */
-
-        .main {
-            width: 70%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 0 17px 22px 0;
-        }
-
-        .header {
-            width: 100%;
-            height: 54px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .chatbox-logo {
-            width: 164px;
-        }
-
-        /* =========chatbox start page========= */
-
-        .start-screen {
-            width: 100%;
-            background: #f5f5f5;
-            border-radius: 15px;
-            height: calc(100% - 54px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .top-part img {
-            width: 187px;
-        }
-
-        .middle-part {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .middle-part-text {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 26px;
-        }
-
-        .home-title {
-            font-size: 34px;
-            font-weight: 700;
-            color: #000;
-            margin-top: 31px;
-        }
-
-        .home-title-2 {
-            font-size: 33px;
-            font-weight: 700;
-            color: #00bca1;
-        }
-
-        .home-sm-text {
-            text-align: center;
-            font-size: 16px;
-            font-weight: 400;
-            color: #000;
-        }
-
-        .start-btn {
-            font-size: 18px;
-            font-weight: 400;
-            color: #fff;
-            background-color: #00bca1;
-            padding: 15px 21px;
-            border-radius: 8px;
-            margin-top: 36px;
-            margin-bottom: 50px;
-            text-align: center;
-            width: fit-content;
-        }
-
-        .start-btn:hover {
-            background-color: #00a88f;
-        }
     }
 
     @media (max-width: 1024px) {
         .container {
             width: 100%;
             height: 100dvh;
-            padding: 24px 0px 36px 0px;
+            padding: 26px 39px 51px 39px;
             display: flex;
-            flex-direction: column;
+            flex-direction: column-reverse;
             justify-content: center;
+        }
+        .sidebar {
+            width: 100%;
+            height: fit-content;
+            z-index: 100;
+            margin-top: 27px;
+        }
+
+        .chatlist-header {
+            background-color: #fff;
+            display: block;
+            height: fit-content;
+            width: 100%;
+            padding-bottom: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .chatlist-header .logo {
+            width: 174px;
+        }
+        .btn-back {
+            all: unset;
+            height: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            cursor: pointer;
+            left: 20px;
+        }
+        .sidebar .sidebar-chatlist {
+            width: 100%;
+            background-color: #fff;
+            display: block;
+            position: fixed;
+            top: 0;
+            left: -100%;
+            padding: 0 13px;
+            transition: 0.4s ease;
+        }
+
+        .chatlist-title,
+        .sidebar-lg-button,
+        .search-chat {
+            display: none;
+        }
+        .chatlist {
+            padding: 26px 9px 20px 9px;
+            height: 100%;
+        }
+        .chatlist-item {
+            background-color: #f5f5f5;
         }
     }
 </style>

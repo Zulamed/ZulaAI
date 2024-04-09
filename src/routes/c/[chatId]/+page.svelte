@@ -1,6 +1,22 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { writable } from "svelte/store";
+    let isMobile = false;
+    let isLoading = true;
+
+    const updateMobileStatus = () => {
+        isMobile = window.innerWidth <= 1024;
+    };
+
+    onMount(() => {
+        updateMobileStatus();
+        isLoading = false;
+        window.addEventListener("resize", updateMobileStatus);
+
+        return () => {
+            window.removeEventListener("resize", updateMobileStatus);
+        };
+    });
 
     let inputValue = "";
     let textareaHeight = writable<number>(0);
@@ -29,14 +45,18 @@
             minute: "2-digit",
             hour12: true,
         });
-        messages.push({
-            isUser: true,
-            sender: "You",
-            senderImg: "/icons/user.jpg",
-            time: time,
-            text: inputValue,
-        });
-        messages = messages;
+        if (inputValue.trim() !== "") {
+            messages.push({
+                isUser: true,
+                sender: "You",
+                senderImg: "/icons/user.jpg",
+                time: time,
+                text: inputValue,
+            });
+            messages = messages;
+        } else {
+            return;
+        }
 
         inputValue = "";
         textareaHeight.set(0);
@@ -44,7 +64,8 @@
         const textarea = document.getElementById(
             "chat-input",
         ) as HTMLTextAreaElement;
-        if (window.innerWidth > 1280) {
+
+        if (window.innerWidth > 1440) {
             textarea.style.height = "80px";
         } else {
             textarea.style.height = "54px";
@@ -56,8 +77,11 @@
             messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
         });
     }
+    let previousPage = "";
 
     onMount(() => {
+        previousPage = document.referrer || "/";
+
         const textarea = document.getElementById(
             "chat-input",
         ) as HTMLTextAreaElement;
@@ -89,7 +113,7 @@
         });
 
         textarea.addEventListener("input", () => {
-            if (window.innerWidth > 1280) {
+            if (window.innerWidth > 1440) {
                 textarea.style.height = "80px";
             } else {
                 textarea.style.height = "54px";
@@ -97,34 +121,19 @@
             textarea.style.height = textarea.scrollHeight + "px";
         });
     });
+
+    function goBack() {
+        history.back();
+    }
 </script>
 
 <div class="main">
-    <div class="header">
-        <a class="btn-back" href="/c">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="29"
-                height="29"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#191616"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-chevron-left"
-                ><path d="m15 18-6-6 6-6" /></svg
-            >
-        </a>
-        <a href=".">
-            <img
-                src="/logo/Grouplogo2.svg"
-                class="chatbox-logo"
-                alt="ZulaMed"
-            />
-        </a>
+    <div class="chatlist-header">
+        <button on:click={goBack} class="btn-back">
+            <img src="/icons/back.svg" alt="Back" />
+        </button>
+        <img src="/logo/Grouplogo2.svg" alt="Zulamed" class="logo" />
     </div>
-
     <div class="chatbox">
         <div class="messages-wrapper">
             <!-- ==========MESSAGE========== -->
@@ -227,10 +236,6 @@
 </div>
 
 <style>
-    .btn-back {
-        display: none;
-    }
-
     .typing-animation {
         display: flex;
         align-items: center;
@@ -272,23 +277,11 @@
     /* =========header========= */
 
     .main {
-        width: 70%;
-        height: 100%;
+        width: 100%;
+        height: calc(100% - 93px);
         display: flex;
         flex-direction: column;
         padding: 0 17px 22px 0;
-    }
-
-    .header {
-        width: 100%;
-        height: 93px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .chatbox-logo {
-        width: 300px;
     }
 
     .chatbox {
@@ -301,21 +294,31 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        gap: 24px;
     }
 
     .messages-wrapper {
         width: 100%;
-        height: calc(100% - 54px);
+        height: 100%;
         display: flex;
         flex-direction: column;
         align-items: end;
-        padding-bottom: 45px;
         align-items: center;
         gap: 19px;
         overflow-x: hidden;
         overflow-y: scroll;
         scrollbar-width: thin;
+        scrollbar-color: #00bca1 transparent;
     }
+
+    .messages-wrapper::-webkit-scrollbar-thumb {
+        background-color: #00bca1;
+        border-radius: 8px;
+    }
+    .messages-wrapper::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
     @supports (-ms-ime-align: auto) {
         .messages-wrapper {
             scrollbar-width: thin;
@@ -385,15 +388,15 @@
 
     .message.incoming .message-content,
     .message.incoming-typing .message-content {
-        background: #00bca11a;
-        border: 1px solid #00bca1;
+        background: #fff;
+        border: 1px solid transparent;
     }
     .message.incoming-error .message-content {
         background: #ff00001a;
         border: 1px solid #ff0000;
     }
     .message.outgoing .message-content {
-        background: #fff;
+        background: #00bca11a;
     }
 
     /* ===================MESSAGEBOX=================== */
@@ -451,7 +454,7 @@
         font-family: "Montserrat";
         width: 100%;
         max-height: 330px;
-        height: 80px;
+        height: 79px;
         border: none;
         outline: none;
         resize: none;
@@ -482,7 +485,11 @@
         background-color: #f4f4f4;
     }
 
-    @media (max-width: 1280px) {
+    .chatlist-header {
+        display: none;
+    }
+
+    @media (max-width: 1440px) {
         .typing-textarea {
             width: 100%;
             display: flex;
@@ -515,39 +522,26 @@
             padding: 8px;
         }
 
+        .main {
+            width: 100%;
+            height: calc(100% - 54px);
+            display: flex;
+            flex-direction: column;
+            padding: 0 17px 22px 0;
+        }
         .chatbox {
             position: relative;
             width: 100%;
-            height: calc(100% - 54px);
+            height: 100%;
             border-radius: 15px;
             background-color: #f5f5f5;
-            padding: 16px 42px;
+            padding: 16px 32px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
         /* =========header========= */
-
-        .main {
-            width: 70%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 0 17px 22px 0;
-        }
-
-        .header {
-            width: 100%;
-            height: 54px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .chatbox-logo {
-            width: 164px;
-        }
 
         .messagebox-wrapper {
             width: 100%;
@@ -591,7 +585,7 @@
             display: flex;
             flex-direction: column;
             align-items: end;
-            padding-bottom: 45px;
+            padding: 0 10px 45px 10px;
             align-items: center;
             gap: 19px;
             overflow-x: hidden;
@@ -653,17 +647,13 @@
             padding: 0;
         }
 
-        .header {
-            height: fit-content;
-            display: flex;
-            align-items: center;
-        }
-
         .chatbox {
-            height: 100%;
-            padding: 20px 0px;
+            height: 100dvh;
+            padding: 0px;
             border-radius: 0;
             background-color: #fff;
+            position: inherit;
+            padding-top: 83px;
         }
 
         /* =======message box======= */
@@ -671,14 +661,11 @@
             padding: 0;
         }
         .messagebox-wrapper {
-            position: fixed;
-            bottom: 12px;
-            left: 0;
             width: 100%;
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 24px 23px;
+            padding: 24px 23px 10px 23px;
             background: #fff;
             border-top: 1px solid #f5f5f5;
         }
@@ -717,20 +704,41 @@
         }
 
         .messages-wrapper {
-            padding: 0 25px 45px 25px;
+            padding: 0px 24px 10px 24px;
+            height: calc(100% - 54px);
         }
 
         .message.outgoing .message-content {
             background: #00bca11a;
         }
 
-        .btn-back {
+        .chatlist-header {
+            background-color: #fff;
             display: block;
+            height: 56px;
+            width: 100%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 103;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .chatlist-header .logo {
+            width: 174px;
+        }
+        .btn-back {
+            all: unset;
+            height: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: absolute;
             cursor: pointer;
             left: 20px;
         }
-
         .message-content {
             border-radius: 15px;
         }

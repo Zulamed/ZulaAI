@@ -59,13 +59,6 @@
         align-items: center;
     }
 
-    .input-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 36px;
-        margin-bottom: 35px;
-    }
-
     .home-title {
         font-size: 37px;
         font-weight: 600;
@@ -96,11 +89,6 @@
             margin-top: 40px;
         }
 
-        .input-wrapper {
-            gap: 26px;
-            width: 384px;
-        }
-
         .home-title {
             margin-bottom: 32px;
         }
@@ -117,7 +105,7 @@
 
     @media (max-width: 425px) {
         .container {
-            padding: 127px 40px 100px 40px;
+            padding: 68px 40px 68px 40px;
         }
 
         .home-title {

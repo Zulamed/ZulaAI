@@ -23,6 +23,7 @@
         justify-content: center;
         align-items: center;
         gap: 80px;
+        padding: 0 39px;
     }
 
     .bottom-part .home-subtitle {
@@ -66,6 +67,9 @@
         }
     }
     @media (max-width: 768px) {
+        .bottom-part {
+            gap: 63px;
+        }
         .bottom-part .terms {
             flex-wrap: wrap;
             row-gap: 23px;

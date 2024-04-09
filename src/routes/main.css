@@ -43,6 +43,11 @@ textarea {
     border: 0;
 }
 
+a:active,
+button:active {
+    background-color: transparent;
+}
+
 /* Remove default vertical alignment */
 button,
 input,

@@ -141,7 +141,7 @@
 
     @media (max-width: 425px) {
         .container {
-            padding: 127px 40px 100px 40px;
+            padding: 68px 40px 68px 40px;
         }
         .input-wrapper {
             width: 100%;

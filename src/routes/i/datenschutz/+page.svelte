@@ -74,7 +74,7 @@
         justify-content: start;
         align-items: center;
         height: 100%;
-        padding: 83px 0;
+        padding: 24px 0;
     }
 
     .back-btn {
@@ -124,7 +124,7 @@
         }
 
         .middle-part {
-            padding: 69px 0;
+            padding: 17px 0;
         }
 
         .back-btn {
@@ -143,25 +143,22 @@
     }
     @media (max-width: 1024px) {
         .container {
-            padding: 39px 109px 39px 109px;
+            padding: 39px 28px;
         }
 
         .i-title {
             font-size: 28px;
+            margin-bottom: 22px;
         }
     }
 
     @media (max-width: 768px) {
-        .container {
-            padding: 127px 36px 153px 36px;
-        }
-
         .top-part img {
             width: 174px;
         }
 
         .middle-part {
-            padding: 53px 0;
+            padding: 17px 0;
         }
 
         .back-btn {
