@@ -14,7 +14,9 @@
 
 <div class="container">
     <div class="top-part">
-        <img class="top-part" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
+        <a href="/c">
+            <img class="top-part" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
+        </a>
     </div>
     <button on:click={goBack} class="back-btn">
         <svg

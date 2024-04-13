@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
     import type { Writable } from "svelte/store";
 
     export let inputId = "input";
@@ -9,6 +9,8 @@
 
     let isEmpty = true;
 
+    let dispatcher = createEventDispatcher();
+
     function onInput(e: Event) {
         let target = e.target as HTMLInputElement;
         let label = document.querySelector(
@@ -17,7 +19,12 @@
         isEmpty = target.value.trim() === "";
         $value = target.value;
 
-        if (target.type === "email" && !target.checkValidity()) {
+        dispatcher("validityChange", target.checkValidity());
+
+        if (
+            (target.type === "email" && !target.checkValidity()) ||
+            (target.type === "number" && !target.checkValidity())
+        ) {
             target.classList.add("invalid"); // Добавить класс "invalid" к input
             target.classList.remove("focus"); // Удалить класс "focus" у input
             label.classList.add("invalid"); // Добавить класс "invalid" к label
@@ -34,6 +41,18 @@
         inputElement.value = $value;
         isEmpty = inputElement.value.trim() === "";
     });
+
+    function onFocusOut() {
+        let target = inputElement;
+        let label = document.querySelector(
+            `label[for=${inputId}]`,
+        ) as HTMLLabelElement;
+
+        if (target.value.trim() === "") {
+            target.classList.remove("invalid"); // Remove "invalid" class from input
+            label.classList.remove("invalid"); // Remove "invalid" class from label
+        }
+    }
 </script>
 
 <div class="entryarea">
@@ -42,6 +61,7 @@
         type={inputType}
         class:input={true}
         on:input={onInput}
+        on:blur={onFocusOut}
         bind:this={inputElement}
         required
     />
@@ -104,19 +124,6 @@
         -webkit-box-shadow: 0 0 0px 1000px white inset;
     }
 
-    .pass-show {
-        position: absolute;
-        top: 50%;
-        right: 25px;
-        transform: translateY(-50%);
-        background-color: transparent;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        padding: 0;
-        margin: 0;
-    }
-
     .labelline {
         position: absolute;
         top: 50%;
@@ -151,18 +158,6 @@
     }
 
     input[type="number"]:user-invalid + .labelline {
-        top: 0;
-        transform: translateY(-50%) translateX(10px);
-        color: red;
-        background-color: white;
-        padding: 0 10px;
-    }
-
-    input[type="email"]:user-invalid {
-        border: 1px solid red;
-    }
-
-    input[type="email"]:user-invalid + .labelline {
         top: 0;
         transform: translateY(-50%) translateX(10px);
         color: red;
@@ -205,17 +200,6 @@
             padding: 0 10px;
             top: 50%;
             transform: translateY(-50%);
-        }
-
-        .pass-show {
-            right: 10px;
-            width: 25px;
-            height: 25px;
-            transform: translateY(-50%);
-        }
-        .pass-show img {
-            width: 25px;
-            height: 25px;
         }
 
         input:focus + .labelline,
@@ -262,17 +246,6 @@
             transform: translateY(-50%);
         }
 
-        .pass-show {
-            right: 10px;
-            width: 25px;
-            height: 25px;
-            transform: translateY(-50%);
-        }
-        .pass-show img {
-            width: 25px;
-            height: 25px;
-        }
-
         input:focus + .labelline,
         input:valid + .labelline {
             top: 0;
@@ -288,12 +261,44 @@
             background-color: white !important;
             padding: 0 10px !important;
         }
+        input[type="email"]:user-invalid {
+            border: 1px solid red;
+        }
+
         input[type="email"]:user-invalid + .labelline {
             top: 0;
             transform: translateY(-50%) translateX(10px);
             color: red;
             background-color: white;
             padding: 0 10px;
+        }
+
+        input[type="number"]:user-invalid {
+            border: 1px solid red;
+        }
+
+        input[type="number"]:user-invalid + .labelline {
+            top: 0;
+            transform: translateY(-50%) translateX(10px);
+            color: red;
+            background-color: white;
+            padding: 0 10px;
+        }
+
+        .labelline.focus {
+            top: 0;
+            transform: translateY(-50%) translateX(10px);
+            color: #00bca1;
+            background-color: white;
+            padding: 0 10px;
+        }
+
+        .labelline.invalid {
+            top: 0 !important;
+            transform: translateY(-50%) translateX(10px) !important;
+            color: red !important;
+            background-color: white !important;
+            padding: 0 10px !important;
         }
     }
 </style>

@@ -10,7 +10,9 @@
 </svelte:head>
 
 <div class="container">
-    <img class="top-part" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
+    <a href="/">
+        <img class="top-part" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
+    </a>
     <div class="middle-part">
         <h1 class="home-title">Passwort zurücksetzen</h1>
         <p class="subtitle">
@@ -47,7 +49,7 @@
         text-align: center;
         color: #616163;
         font-size: 16px;
-        font-weight: 400;
+        font-weight: 600;
         margin-top: 19px;
         margin-bottom: 42px;
     }

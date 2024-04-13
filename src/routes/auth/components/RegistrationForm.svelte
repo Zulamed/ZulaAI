@@ -1,17 +1,133 @@
-<script>
+<script lang="ts">
     import Button from "../components/button.svelte";
     import Input from "../components/input.svelte";
     import InputPassword from "./inputPassword.svelte";
-    import DateInput from "./dateInput.svelte";
     import SelectInput from "./selectInput.svelte";
     import { firstStep, secondStep, thirdStep } from "./store";
+    import { get } from "svelte/store";
+    import {
+        addNotification,
+        removeNotification,
+    } from "$lib/components/alert.svelte";
+    import DateInput from "./dateInput.svelte";
 
     export let currentStep = 1;
 
+    let error = false;
+    let email = firstStep.email;
+    let password = firstStep.password;
+    let passwordConfirmation = firstStep.passwordConfirmation;
+
+    $: arePasswordsNotEqual = $password !== $passwordConfirmation;
+
+    let lastToast: string | undefined = undefined;
+
     function nextStep() {
+        error = false;
+
+        if (currentStep === 1) {
+            let email_dom = document.getElementById(
+                "email",
+            ) as HTMLInputElement;
+            error = !email_dom.checkValidity();
+            if (!$email || !$password || !$passwordConfirmation) {
+                error = true;
+                if (lastToast) {
+                    removeNotification(lastToast);
+                }
+                lastToast = addNotification({
+                    data: {
+                        fieldName: "Fehlermeldung",
+                        error: "Bitte füllen Sie alle Felder aus",
+                    },
+                }).id;
+            } else if (currentStep === 1) {
+                let email_dom = document.getElementById(
+                    "email",
+                ) as HTMLInputElement;
+                error = !email_dom.checkValidity();
+                if (!$email || !$password || !$passwordConfirmation) {
+                    error = true;
+                    if (lastToast) {
+                        removeNotification(lastToast);
+                    }
+                    lastToast = addNotification({
+                        data: {
+                            fieldName: "Fehlermeldung",
+                            error: "Bitte füllen Sie alle Felder aus",
+                        },
+                    }).id;
+                } else if ($password !== $passwordConfirmation) {
+                    error = true;
+                    if (lastToast) {
+                        removeNotification(lastToast);
+                    }
+                    lastToast = addNotification({
+                        data: {
+                            fieldName: "Passwort",
+                            error: "Die Passwörter stimmen nicht überein",
+                        },
+                    }).id;
+                } else if (
+                    $password.length < 8 ||
+                    !/\d/.test($password) ||
+                    !/[a-zA-Z]/.test($password)
+                ) {
+                    error = true;
+                    if (lastToast) {
+                        removeNotification(lastToast);
+                    }
+                    lastToast = addNotification({
+                        data: {
+                            fieldName: "Passwort",
+                            error: "Das Passwort muss mindestens 8 Zeichen lang sein und mindestens eine Zahl und einen Buchstaben enthalten",
+                        },
+                    }).id;
+                }
+            }
+        } else if (currentStep === 2) {
+            if (
+                !get(secondStep.vorname) ||
+                !get(secondStep.nachname) ||
+                !get(secondStep.date)
+            ) {
+                error = true;
+                if (lastToast) {
+                    removeNotification(lastToast);
+                }
+                lastToast = addNotification({
+                    data: {
+                        fieldName: "Fehlermeldung",
+                        error: "Bitte füllen Sie alle Felder aus",
+                    },
+                }).id;
+            }
+        } else if (currentStep === 3) {
+            if (
+                !get(thirdStep.university) ||
+                !get(thirdStep.semester) ||
+                !get(thirdStep.wunschfach)
+            ) {
+                error = true;
+                if (lastToast) {
+                    removeNotification(lastToast);
+                }
+                lastToast = addNotification({
+                    data: {
+                        fieldName: "Fehlermeldung",
+                        error: "Bitte füllen Sie alle Felder aus",
+                    },
+                }).id;
+            }
+        }
+
+        // Если обнаружена ошибка, завершаем выполнение функции
+        if (error) {
+            return;
+        }
+
         currentStep++;
     }
-
     function prevStep() {
         currentStep--;
     }
@@ -29,11 +145,13 @@
             inputPlaceholder="Passwort"
             inputId="password"
             value={firstStep.password}
+            invalid={arePasswordsNotEqual}
         />
         <InputPassword
             inputPlaceholder="Passwort wiederholen"
             inputId="password-repeat"
             value={firstStep.passwordConfirmation}
+            invalid={arePasswordsNotEqual}
         />
     </div>
 
@@ -84,7 +202,7 @@
         <Button
             buttonTextColor="var(--color-secondary)"
             buttonBgColor="var(--color-primary)"
-            buttonText="Weiter"
+            buttonText="Zurück"
             onClick={prevStep}
             buttonType="button"
         />

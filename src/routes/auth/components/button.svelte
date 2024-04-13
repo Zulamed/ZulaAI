@@ -63,8 +63,8 @@
     @media (max-width: 425px) {
         .default-button {
             font-size: 18px;
-            padding: 15px 0;
-            width: 129px;
+            padding: 15px 30px;
+            width: auto;
         }
     }
 </style>

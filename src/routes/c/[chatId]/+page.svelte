@@ -1,6 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { writable } from "svelte/store";
+    import { fly } from "svelte/transition";
+
     let isMobile = false;
     let isLoading = true;
 
@@ -114,11 +116,10 @@
 
         textarea.addEventListener("input", () => {
             if (window.innerWidth > 1440) {
-                textarea.style.height = "80px";
+                textarea.style.height = textarea.scrollHeight - 1 + "px";
             } else {
                 textarea.style.height = "54px";
             }
-            textarea.style.height = textarea.scrollHeight + "px";
         });
     });
 
@@ -132,33 +133,12 @@
         <button on:click={goBack} class="btn-back">
             <img src="/icons/back.svg" alt="Back" />
         </button>
-        <img src="/logo/Grouplogo2.svg" alt="Zulamed" class="logo" />
+        <a href="/c">
+            <img src="/logo/Grouplogo2.svg" alt="Zulamed" class="logo" />
+        </a>
     </div>
     <div class="chatbox">
         <div class="messages-wrapper">
-            <!-- ==========MESSAGE========== -->
-            {#each messages as message}
-                <div class="message {message.isUser ? 'outgoing' : 'incoming'}">
-                    <div
-                        class="message-full"
-                        style="display: flex; flex-direction: column;"
-                    >
-                        <img
-                            class="sender-img"
-                            src={message.senderImg}
-                            alt=""
-                        />
-                        <div class="message-info">
-                            <h2 class="message-sender">{message.sender}</h2>
-                            <span class="message-time">{message.time}</span>
-                        </div>
-                        <div class="message-content">
-                            <p class="content-text">{message.text}</p>
-                        </div>
-                    </div>
-                </div>
-            {/each}
-            <!-- ==========MESSAGE========== -->
             <!-- ==========MESSAGE========== -->
             <div class="message incoming-error">
                 <div
@@ -199,6 +179,32 @@
                     </div>
                 </div>
             </div>
+            <!-- ==========MESSAGE========== -->
+            <!-- ==========MESSAGE========== -->
+            {#each messages as message}
+                <div
+                    transition:fly={{ y: 7, duration: 150 }}
+                    class="message {message.isUser ? 'outgoing' : 'incoming'}"
+                >
+                    <div
+                        class="message-full"
+                        style="display: flex; flex-direction: column;"
+                    >
+                        <img
+                            class="sender-img"
+                            src={message.senderImg}
+                            alt=""
+                        />
+                        <div class="message-info">
+                            <h2 class="message-sender">{message.sender}</h2>
+                            <span class="message-time">{message.time}</span>
+                        </div>
+                        <div class="message-content">
+                            <p class="content-text">{message.text}</p>
+                        </div>
+                    </div>
+                </div>
+            {/each}
             <!-- ==========MESSAGE========== -->
         </div>
 
@@ -454,7 +460,7 @@
         font-family: "Montserrat";
         width: 100%;
         max-height: 330px;
-        height: 79px;
+        height: 80px;
         border: none;
         outline: none;
         resize: none;
@@ -623,7 +629,7 @@
             top: 0;
             border-radius: 8px;
             left: 0px;
-            z-index: 100;
+            z-index: 85;
         }
         .message-time {
             font-size: 8px;
@@ -654,6 +660,7 @@
             background-color: #fff;
             position: inherit;
             padding-top: 83px;
+            gap: 0;
         }
 
         /* =======message box======= */
@@ -673,6 +680,7 @@
         .typing-textarea textarea {
             background-color: #f5f6f5;
             width: 92%;
+            height: 54px;
         }
 
         .message-box:focus-within {

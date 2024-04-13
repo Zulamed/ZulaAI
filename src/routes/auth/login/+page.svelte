@@ -11,7 +11,9 @@
 </svelte:head>
 
 <div class="container">
-    <img class="top-part" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
+    <a href="/" style="height: fit-content; display: flex;">
+        <img class="top-part" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
+    </a>
     <div class="middle-part">
         <h1 class="home-title">Willkommen zurück</h1>
         <form class="form login-form">
@@ -29,7 +31,7 @@
                 />
             </div>
             <div class="reset-password">
-                <a href="reset" class=""> Passwort vergessen?</a>
+                <a href="/auth/reset" class="">Passwort vergessen?</a>
             </div>
             <Button buttonText="Weiter" buttonType="submit" onClick="" />
             <p class="register-link">
@@ -47,7 +49,7 @@
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
-        height: 100vh;
+        height: 100dvh;
         background-color: #fff;
         padding: 80px;
         font-size: 50px;
@@ -141,7 +143,7 @@
 
     @media (max-width: 425px) {
         .container {
-            padding: 68px 40px 68px 40px;
+            padding: 38px 40px;
         }
         .input-wrapper {
             width: 100%;

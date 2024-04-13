@@ -7,7 +7,9 @@
         <img src="/icons/settings-lg.svg" alt="" />
         <span>Settings</span>
     </button>
-    <img class="top-part-logo" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
+    <a href="/c">
+        <img class="top-part-logo" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
+    </a>
     <div class="middle-part">
         <h1 class="home-title">Hallo, Name Surname!</h1>
         <p class="home-sm-text">

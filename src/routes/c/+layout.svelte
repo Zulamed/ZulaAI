@@ -4,10 +4,48 @@
     import Sidebarlinks from "./components/sidebarLinks.svelte";
     import { needsPaddingChangedForMobile } from "./store";
     import { page } from "$app/stores";
-
+    import { fly } from "svelte/transition";
+    let searchValue = "";
     let isMobile = false;
     let isLoading = true;
+    let filteredHistory: History[] = [];
 
+    const names = [
+        "Alice",
+        "Bob",
+        "Charlie",
+        "David",
+        "Eve",
+        "Frank",
+        "Grace",
+        "Heidi",
+        "Ivan",
+        "Jane",
+        "Kevin",
+        "Laura",
+        "Michael",
+        "Nancy",
+        "Oliver",
+        "Peter",
+        "Quincy",
+        "Rachel",
+        "Steve",
+        "Tina",
+        "Ursula",
+        "Victor",
+        "Wendy",
+        "Xander",
+        "Yvonne",
+        "Zack",
+    ];
+
+    $: filteredHistory = history.filter((item) => {
+        const search = searchValue.toLowerCase();
+        return (
+            item.title.toLowerCase().includes(search) ||
+            item.text.toLowerCase().includes(search)
+        );
+    });
     const updateMobileStatus = () => {
         isMobile = window.innerWidth <= 1024;
     };
@@ -42,12 +80,17 @@
             minute: "2-digit",
             hour12: true,
         });
+        const randomName = names[Math.floor(Math.random() * names.length)];
         history.push({
-            title: `New Chat ${history.length + 1}`,
+            title: `Patient - ${randomName}`,
             time: time,
             text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit ...`,
         });
         history = history;
+        const chatlist = document.querySelector(".chatlist") as HTMLDivElement;
+        requestAnimationFrame(() => {
+            chatlist.scrollTo(0, 0);
+        });
     }
 
     function closeChatlist() {
@@ -66,7 +109,7 @@
             <Sidebarlinks />
 
             <div class="sidebar-chatlist">
-                {#if $page.url.pathname === "/c" || $page.url.pathname === "/c/chatId" || $page.url.pathname === "/c/settings"}
+                {#if $page.url.pathname === "/c" || $page.url.pathname === "/c/chatId" || ($page.url.pathname === "/c/settings" && isMobile)}
                     <h1 class="chatlist-title">Meine Simulationen</h1>
                     <div class="search-chat-wrapper">
                         <button on:click={addChat} class="sidebar-lg-button"
@@ -77,7 +120,11 @@
                     <div class="search-chat-wrapper">
                         <label class="search-chat">
                             <img src="/icons/search.svg" alt="search" />
-                            <input type="text" placeholder="Suche" />
+                            <input
+                                bind:value={searchValue}
+                                type="text"
+                                placeholder="Suche"
+                            />
                         </label>
                     </div>
 
@@ -86,29 +133,57 @@
                             <button on:click={closeChatlist} class="btn-back">
                                 <img src="/icons/back.svg" alt="Back" />
                             </button>
-                            <img
-                                src="/logo/Grouplogo2.svg"
-                                alt="Zulamed"
-                                class="logo"
-                            />
-                        </div>
-                        {#each history as item}
-                            <a href="." class="chatlist-item">
-                                <h2 class="chat-title">{item.title}</h2>
-                                <span class="last-update">{item.time}</span>
-                                <img src="/logo/Mobilelogo.webp" alt="" />
-                                <p class="last-message">
-                                    {item.text}
-                                </p>
+                            <a href="/c" on:click={closeChatlist}>
+                                <img
+                                    src="/logo/Grouplogo2.svg"
+                                    alt="Zulamed"
+                                    class="logo"
+                                />
                             </a>
-                        {/each}
+                        </div>
+                        {#if searchValue.length > 0}
+                            {#each filteredHistory as item}
+                                <a
+                                    transition:fly={{ y: -10, duration: 100 }}
+                                    href="/c/chatId"
+                                    class="chatlist-item"
+                                    on:click={closeChatlist}
+                                >
+                                    <h2 class="chat-title">{item.title}</h2>
+                                    <span class="last-update">{item.time}</span>
+                                    <img src="/logo/Mobilelogo.webp" alt="" />
+                                    <p class="last-message">
+                                        {item.text}
+                                    </p>
+                                </a>
+                            {/each}
+                        {:else}
+                            {#each history as item}
+                                <a
+                                    transition:fly={{ y: -10, duration: 100 }}
+                                    href="/c/chatId"
+                                    class="chatlist-item"
+                                    on:click={closeChatlist}
+                                >
+                                    <h2 class="chat-title">{item.title}</h2>
+                                    <span class="last-update">{item.time}</span>
+                                    <img src="/logo/Mobilelogo.webp" alt="" />
+                                    <p class="last-message">
+                                        {item.text}
+                                    </p>
+                                </a>
+                            {/each}
+                        {/if}
                     </div>
                 {:else}
                     <h1 class="chatlist-title">Einstellungen</h1>
                     <div class="search-chat-wrapper">
                         <button on:click={addChat} class="sidebar-lg-button"
-                            ><img src="/icons/user.svg" alt="user" />Persönliche
-                            daten</button
+                            ><img
+                                class="user-svg"
+                                src="/icons/user.svg"
+                                alt="user"
+                            />Persönliche daten</button
                         >
                     </div>
                 {/if}
@@ -119,7 +194,7 @@
                 <div style="display: none;" />
             {:else}
                 <div class="header">
-                    <a href=".">
+                    <a href="/c">
                         <img
                             src="/logo/Grouplogo2.svg"
                             class="logotype"
@@ -223,6 +298,10 @@
         font-size: 20px;
         font-weight: 500;
         line-height: 27px;
+        user-select: none;
+    }
+    .user-svg {
+        width: 20px;
     }
 
     .sidebar-lg-button:hover {
@@ -390,6 +469,10 @@
             font-weight: 500;
             line-height: 27px;
         }
+        .user-svg {
+            width: 14px;
+        }
+
         .sidebar-lg-button:hover {
             background-color: #f1f1f1;
         }
@@ -425,7 +508,7 @@
         .chatlist {
             width: 100%;
             display: flex;
-            flex-direction: column;
+            flex-direction: column-reverse;
             gap: 10px;
             padding: 10px 3px 10px 0;
             overflow: scroll;
@@ -497,6 +580,7 @@
 
         .chatlist-header {
             background-color: #fff;
+            position: relative;
             display: block;
             height: fit-content;
             width: 100%;
@@ -538,6 +622,7 @@
         .chatlist {
             padding: 26px 9px 20px 9px;
             height: 100%;
+            flex-direction: column;
         }
         .chatlist-item {
             background-color: #f5f5f5;

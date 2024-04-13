@@ -5,6 +5,7 @@
     export let inputId = "input";
     export let inputPlaceholder = "Placeholder";
     export let value: Writable<string>;
+    export let invalid: boolean = false;
 
     let isEmpty = true;
     let passwordVisible = false;
@@ -38,6 +39,7 @@
         on:input={onInput}
         id={inputId}
         class:input={true}
+        class:invalid
         type="password"
         required
     />
@@ -141,7 +143,7 @@
     input:focus + .labelline,
     input:valid + .labelline {
         top: 0;
-        transform: translateY(-50%) translateX(26px);
+        transform: translateY(-50%) translateX(10px);
         color: #00bca1;
         background-color: white;
         padding: 0 10px;
@@ -149,7 +151,7 @@
 
     .labelline.focus {
         top: 0 !important;
-        transform: translateY(-50%) translateX(26px) !important;
+        transform: translateY(-50%) translateX(10px) !important;
         color: #00bca1 !important;
         background-color: white !important;
         padding: 0 10px !important;

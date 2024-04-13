@@ -2,14 +2,20 @@
     import Terms from "$lib/components/terms.svelte";
 </script>
 
+<svelte:head>
+    <title>ZulaAI - Chat</title>
+</svelte:head>
+
 <div class="main">
     <div class="start-screen">
         <div class="top-part">
-            <img
-                src="/logo/Mobilelogo.webp"
-                class="mobile-logo"
-                alt="ZulaMed"
-            />
+            <a href="/c">
+                <img
+                    src="/logo/Mobilelogo.webp"
+                    class="mobile-logo"
+                    alt="ZulaMed"
+                />
+            </a>
         </div>
 
         <div class="middle-part">
@@ -17,7 +23,7 @@
                 <h1 class="home-title">Willkommen</h1>
                 <h1 class="home-title-2">ZULAMED</h1>
                 <p class="home-sm-text">
-                    Jetzt eine Sinulation mit ZulaMed beginnen
+                    Beginnen Sie jetzt eine Simulation mit ZulaMed
                 </p>
             </div>
             <a class="start-btn" href="c/chatId">Simulation beginnen</a>

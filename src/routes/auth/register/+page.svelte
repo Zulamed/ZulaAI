@@ -9,7 +9,9 @@
 </svelte:head>
 
 <div class="container">
-    <img class="top-part" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
+    <a href="/" style="height: fit-content; display: flex;">
+        <img class="top-part" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
+    </a>
     <div class="middle-part">
         <h1 class="home-title">Profil erstellen</h1>
         <p class="subtitle">Registrieren Sie sich um ZulaMed zu nutzen</p>
@@ -37,7 +39,7 @@
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
-        height: 100vh;
+        height: 100dvh;
         background-color: #fff;
         padding: 80px;
         font-size: 50px;
@@ -105,7 +107,7 @@
 
     @media (max-width: 425px) {
         .container {
-            padding: 68px 40px 68px 40px;
+            padding: 38px 40px;
         }
 
         .home-title {

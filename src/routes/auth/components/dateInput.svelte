@@ -32,6 +32,5 @@
                 </DateField.Segment>
             {/each}
         </DateField.Input>
-        <DateField.Label class="labelline">Geburtsdatum</DateField.Label>
     </div>
 </DateField.Root>

@@ -1,4 +1,77 @@
+/* =========Tooltip========= */
+
+.tooltip-trigger {
+    all: unset;
+    cursor: pointer;
+    position: relative;
+    background-color: transparent;
+}
+
+.tooltip-content {
+    position: absolute;
+    width: fit-content;
+    background-color: #00a78e;
+    color: #fff;
+    padding: 7px 15px;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: 400;
+    z-index: 999;
+    margin-left: 10px;
+}
+
+
+/* =========Alert========= */
+
+.alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.alert-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 9px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+}
+
+.alert-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+.alert-description {
+    font-size: 15px;
+    font-weight: 400;
+    color: #616163;
+    margin-bottom: 20px;
+
+}
+
+.alert-cancel {
+    background-color: #f5f5f5;
+    padding: 10px 20px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: 0.1s ease;
+    margin-right: 10px;
+
+}
+
 /* ======DATE INPUT CSS====== */
+
 
 .entryarea {
     position: relative;
@@ -46,20 +119,32 @@
     outline: none;
     font-size: 15px;
     font-weight: 400;
-    border-radius: 9px;
     background-color: transparent;
     display: flex;
     flex-direction: row;
     opacity: 1;
     transition: 0.1s ease;
+    padding: 0 4px;
+    border-radius: 3px;
+
 }
 
-.date-input:not(:focus-within) .input-part {
-    opacity: 0;
+.select-input.active {
+    border: 1px solid #00bca1;
+
+}
+
+
+.input-part:valid .date-input:not(:focus-within) .input-part {
+    opacity: 1;
 }
 
 .date-input.up .input-part {
     opacity: 1;
+}
+
+.input-part:focus {
+    background-color: #00bca052;
 }
 
 .date-input.up {
@@ -74,13 +159,16 @@
 .date-input.up+.labelline,
 .date-input:focus-within+.labelline {
     top: 0 !important;
-    transform: translateY(-35%) translateX(26px) !important;
+    transform: translateY(-50%) translateX(10px) !important;
     color: #00bca1 !important;
     background-color: white !important;
     padding: 0 10px !important;
 }
 
 
+.calendar-trigger svg {
+    stroke: #616163;
+}
 
 /* ======DATE INPUT CSS====== */
 /* ======SELECT INPUT CSS====== */
@@ -91,6 +179,13 @@
     color: #616163;
     border-radius: 9px;
     border: 1px solid #999999;
+    max-height: 300px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+.select-options::-webkit-scrollbar {
+    width: 3px;
 }
 
 .options-item {
@@ -121,6 +216,10 @@
         font-weight: 400;
         padding: 16px 27px;
         height: 50px;
+    }
+
+    .input-part {
+        font-size: 13px;
     }
 
     .labelline {
@@ -160,6 +259,9 @@
         padding: 0 10px;
     }
 }
+
+
+
 
 @media (max-width: 425px) {
     .entryarea {

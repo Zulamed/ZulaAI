@@ -2,7 +2,6 @@
     import Input from "../../auth/components/input.svelte";
     import DateInput from "../../auth/components/dateInput.svelte";
     import SelectInput from "../../auth/components/selectInput.svelte";
-    import Button from "../../auth/components/button.svelte";
     import { settings } from "./store";
 </script>
 
@@ -55,12 +54,20 @@
                     value={settings.wunschfach}
                 />
             </div>
-            <Button onClick="" buttonText="Ändern" buttonType="submit" />
+            <button type="submit" class="btn-settings">Ändern</button>
         </form>
     </div>
 </div>
 
 <style>
+    .btn-settings {
+        all: unset;
+        cursor: pointer;
+        padding: 12px 54px;
+        background-color: #00bca1;
+        color: #fff;
+        border-radius: 8px;
+    }
     /* =========header========= */
 
     .main {
@@ -92,7 +99,7 @@
         gap: 36px;
     }
     .input-group {
-        height: 600px;
+        height: 614px;
         display: flex;
         flex-direction: column;
         gap: 36px;
@@ -110,15 +117,26 @@
         background-color: #f9f9f9;
     }
 
-    @media (max-width: 1280px) {
-        /* =========header========= */
+    @media (max-width: 1440px) {
+        .settings-wrapper {
+            border-left: 3px solid #f5f5f5;
+        }
 
         .main {
-            width: 70%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 0 17px 22px 0;
+            width: 100%;
+            height: calc(100% - 54px);
+            padding: 0 10px;
+        }
+
+        .input-group {
+            width: 43%;
+            height: 396px;
+            gap: 18px;
+            padding: 0 16px 0 0;
+        }
+        .settings {
+            gap: 71px;
+            padding: 0;
         }
     }
 
@@ -138,7 +156,7 @@
         .input-group {
             width: 100%;
             height: 367px;
-            gap: 27px;
+            gap: 18px;
             padding: 10px 16px 0 16px;
         }
         .settings {

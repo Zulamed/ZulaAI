@@ -10,7 +10,9 @@
 </svelte:head>
 
 <div class="container">
-    <img class="top-part" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
+    <a href="/">
+        <img class="top-part" src="/logo/Grouplogo2.svg" alt="ZulaMed" />
+    </a>
     <div class="middle-part">
         <h1 class="home-title">Passwort zurücksetzen</h1>
         <form class="form login-form">
