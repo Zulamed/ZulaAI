@@ -20,16 +20,22 @@
     });
 </script>
 
-<DateField.Root {onValueChange} bind:value={$value}>
+<DateField.Root locale="en-UK" {onValueChange} bind:value={$value}>
     <div class="entryarea">
         <DateField.Input
             class="date-input {up == true ? 'up' : ''}"
             let:segments
         >
             {#each segments as { part, value }}
-                <DateField.Segment {part} class="input-part">
-                    {value}
-                </DateField.Segment>
+                {#if part === "literal"}
+                    <DateField.Segment {part} class="muted-foreground">
+                        {value}
+                    </DateField.Segment>
+                {:else}
+                    <DateField.Segment {part} class="input-part">
+                        {value}
+                    </DateField.Segment>
+                {/if}
             {/each}
         </DateField.Input>
     </div>

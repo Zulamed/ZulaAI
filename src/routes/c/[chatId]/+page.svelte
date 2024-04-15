@@ -50,7 +50,7 @@
         if (inputValue.trim() !== "") {
             messages.push({
                 isUser: true,
-                sender: "You",
+                sender: "Sie",
                 senderImg: "/icons/user.jpg",
                 time: time,
                 text: inputValue,
@@ -126,6 +126,19 @@
     function goBack() {
         history.back();
     }
+
+    function openPopup() {
+        const popup = document.querySelector(
+            ".popup-overlay",
+        ) as HTMLDivElement;
+        popup.style.display = "flex";
+    }
+    function closePopup() {
+        const popup = document.querySelector(
+            ".popup-overlay",
+        ) as HTMLDivElement;
+        popup.style.display = "none";
+    }
 </script>
 
 <div class="main">
@@ -138,6 +151,104 @@
         </a>
     </div>
     <div class="chatbox">
+        <div class="popup-overlay">
+            <div class="popup">
+                <div class="popup-header">
+                    <h2 class="popup-title">Testergebnisse</h2>
+                    <button class="close-popup" on:click={closePopup}>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#00BCA1"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-x"
+                            ><path d="M18 6L6 18M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="popup-content">
+                    <p class="popup-text">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Nunc consequat justo vel porta mattis. Nunc eleifend mi
+                        velit, eu tincidunt ex fermentum eget. Sed id malesuada
+                        nibh, sit amet varius mi. Cras luctus enim et justo
+                        aliquet, vel consequat quam pretium. Vivamus maximus
+                        lectus eget mauris egestas maximus. Cras tincidunt neque
+                        et ex ultricies scelerisque. Nunc venenatis sem vitae
+                        tortor consectetur, eget lacinia velit egestas. Praesent
+                        sollicitudin eget ligula at vehicula. Proin eget dui
+                        fermentum, accumsan velit vel, aliquet erat. Vivamus
+                        quis urna finibus, convallis purus rutrum, laoreet
+                        libero. Maecenas quis tristique justo, vitae rutrum
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Nunc consequat justo vel porta mattis. Nunc eleifend mi
+                        velit, eu tincidunt ex fermentum eget. Sed id malesuada
+                        nibh, sit amet varius mi. Cras luctus enim et justo
+                        aliquet, vel consequat quam pretium. Vivamus maximus
+                        lectus eget mauris egestas maximus. Cras tincidunt neque
+                        et ex ultricies scelerisque. Nunc venenatis sem vitae
+                        tortor consectetur, eget lacinia velit egestas. Praesent
+                        sollicitudin eget ligula at vehicula. Proin eget dui
+                        fermentum, accumsan velit vel, aliquet erat. Vivamus
+                        quis urna finibus, convallis purus rutrum, laoreet
+                        libero. Maecenas quis tristique justo, vitae rutrum
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Nunc consequat justo vel porta mattis. Nunc eleifend mi
+                        velit, eu tincidunt ex fermentum eget. Sed id malesuada
+                        nibh, sit amet varius mi. Cras luctus enim et justo
+                        aliquet, vel consequat quam pretium. Vivamus maximus
+                        lectus eget mauris egestas maximus. Cras tincidunt neque
+                        et ex ultricies scelerisque. Nunc venenatis sem vitae
+                        tortor consectetur, eget lacinia velit egestas. Praesent
+                        sollicitudin eget ligula at vehicula. Proin eget dui
+                        fermentum, accumsan velit vel, aliquet erat. Vivamus
+                        quis urna finibus, convallis purus rutrum, laoreet
+                        libero. Maecenas quis tristique justo, vitae rutrum
+                        tortor. Nulla semper lectus nec justo dapibus efficitur
+                        ac a tellus. Vivamus laoreet erat in enim rhoncus, eget
+                        feugiat turpis dapibus. Maecenas consequat ac turpis
+                        quis hendrerit. Vestibulum nec elit eget mi pharetra
+                        suscipit vel vitae ex. Aliquam at elit non risus
+                        facilisis vulputate a accumsan felis. Quisque et sem
+                        quis quam posuere tincidunt. Curabitur faucibus ex ac
+                        quam gravida, at scelerisque ex aliquet. Aenean
+                        imperdiet porta malesuada. Sed facilisis, velit ut
+                        faucibus feugiat, nisl sem fermentum massa, ac aliquet
+                        leo ligula a arcu. Vivamus a nulla vel dui placerat
+                        rutrum. Lorem ipsum dolor sit amet, consectetur
+                        adipiscing elit. Nunc consequat justo vel porta mattis.
+                        Nunc eleifend mi velit, eu tincidunt ex fermentum eget.
+                        Sed id malesuada nibh, sit amet varius mi. Cras luctus
+                        enim et justo aliquet, vel consequat quam pretium.
+                        Vivamus maximus lectus eget mauris egestas maximus. Cras
+                        tincidunt neque et ex ultricies scelerisque. Nunc
+                        venenatis sem vitae tortor consectetur, eget lacinia
+                        velit egestas. Praesent sollicitudin eget ligula at
+                        vehicula. Proin eget dui fermentum, accumsan velit vel,
+                        aliquet erat. Vivamus quis urna finibus, convallis purus
+                        rutrum, laoreet libero. Maecenas quis tristique justo,
+                        vitae rutrum tortor. Nulla semper lectus nec justo
+                        dapibus efficitur ac a tellus. Vivamus laoreet erat in
+                        enim rhoncus, eget feugiat turpis dapibus. Maecenas
+                        consequat ac turpis quis hendrerit. Vestibulum nec elit
+                        eget mi pharetra suscipit vel vitae ex. Aliquam at elit
+                        non risus facilisis vulputate a accumsan felis. Quisque
+                        et sem quis quam posuere tincidunt. Curabitur faucibus
+                        ex ac quam gravida, at scelerisque ex aliquet. Aenean
+                        imperdiet porta malesuada. Sed facilisis, velit ut
+                        faucibus feugiat, nisl sem fermentum massa, ac aliquet
+                        leo ligula a arcu. Vivamus a nulla vel dui placerat
+                        rutrum.
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <div class="messages-wrapper">
             <!-- ==========MESSAGE========== -->
             <div class="message incoming-error">
@@ -200,7 +311,40 @@
                             <span class="message-time">{message.time}</span>
                         </div>
                         <div class="message-content">
-                            <p class="content-text">{message.text}</p>
+                            <p class="content-text">
+                                {message.text}
+                                {#if message.isUser}
+                                    <button
+                                        on:click={openPopup}
+                                        class="popup-btn"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width="14"
+                                            height="14"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="#FFFFFF"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="lucide lucide-clipboard-plus"
+                                            ><rect
+                                                width="8"
+                                                height="4"
+                                                x="8"
+                                                y="2"
+                                                rx="1"
+                                                ry="1"
+                                            /><path
+                                                d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+                                            /><path d="M9 14h6" /><path
+                                                d="M12 17v-6"
+                                            /></svg
+                                        >
+                                    </button>
+                                {/if}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -242,6 +386,104 @@
 </div>
 
 <style>
+    /* =========popup========= */
+
+    .popup-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+    }
+    .popup-btn {
+        all: unset;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        background-color: #00bca1;
+        border-radius: 50%;
+    }
+    .popup {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 29px;
+        padding: 38px 62px;
+        background-color: #fff;
+        width: 100%;
+        height: 100%;
+        max-height: 600px;
+        max-width: 830px;
+        border-radius: 33px;
+        box-shadow: 1px 5px 13px 1px #00000040;
+    }
+
+    .popup-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .close-popup {
+        all: unset;
+        cursor: pointer;
+        position: absolute;
+        right: 27px;
+        top: 25px;
+        background-color: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+    }
+
+    .close-popup:hover {
+        background-color: #f4f4f4;
+        border-radius: 50%;
+    }
+
+    .popup-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #000000;
+    }
+
+    .popup-content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        overflow-y: scroll;
+        scrollbar-width: thin;
+        scrollbar-color: #00bca1 transparent;
+    }
+
+    .popup-content::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .popup-content::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    .popup-content::-webkit-scrollbar-thumb {
+        background-color: #00bca1;
+        border-radius: 8px;
+    }
+
+    .popup-text {
+        font-size: 15px;
+        font-weight: 400;
+        color: #000000;
+        padding: 0 15px;
+    }
+
+    /* =========popup========= */
+
     .typing-animation {
         display: flex;
         align-items: center;
@@ -390,6 +632,9 @@
         white-space: pre-wrap;
         word-break: break-word;
         line-height: 18.29px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
 
     .message.incoming .message-content,
@@ -496,6 +741,23 @@
     }
 
     @media (max-width: 1440px) {
+        /* =========popup========= */
+
+        .popup {
+            padding: 38px 42px;
+            max-width: 660px;
+            max-height: 522px;
+        }
+        .popup-title {
+            font-size: 15px;
+        }
+
+        .popup-text {
+            font-size: 13px;
+        }
+
+        /* =========popup========= */
+
         .typing-textarea {
             width: 100%;
             display: flex;
@@ -647,6 +909,20 @@
     }
 
     @media (max-width: 1024px) {
+        /* =========popup========= */
+
+        .popup {
+            padding: 38px 42px;
+            max-width: 100%;
+            max-height: 100dvh;
+            width: 100%;
+            height: 100dvh;
+            border-radius: 0;
+            padding: 20px;
+        }
+
+        /* =========popup========= */
+
         .main {
             width: 100%;
             height: 100%;

@@ -107,7 +107,8 @@
                 <a
                     slot="trigger"
                     class="button-lg"
-                    class:active={$page.url.pathname === "/c/settings"}
+                    class:active={$page.url.pathname === "/c/settings" ||
+                        $page.url.pathname === "/c/change-password"}
                     href="/c/settings"
                 >
                     <svg

@@ -5,6 +5,8 @@ import type { Selected } from "bits-ui";
 type Settings = {
     email: Writable<string>,
     password: Writable<string>,
+    passwordConfirmation: Writable<string>,
+    oldPassword: Writable<string>,
     vorname: Writable<string>,
     nachname: Writable<string>,
     date: Writable<DateValue | undefined>,
@@ -16,6 +18,8 @@ type Settings = {
 export const settings: Settings = {
     email: writable(""),
     password: writable(""),
+    passwordConfirmation: writable(""),
+    oldPassword: writable(""),
     vorname: writable(""),
     nachname: writable(""),
     date: writable(undefined),

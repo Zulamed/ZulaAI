@@ -72,6 +72,10 @@
 
 /* ======DATE INPUT CSS====== */
 
+.muted-foreground {
+    background-color: transparent;
+    color: #00a78e;
+}
 
 .entryarea {
     position: relative;

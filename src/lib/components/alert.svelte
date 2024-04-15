@@ -28,8 +28,8 @@
         <div
             use:melt={$content(id)}
             animate:flip={{ duration: 500 }}
-            in:fly={{ duration: 150, x: "-100%" }}
-            out:fly={{ duration: 150, x: "-100%" }}
+            in:fly={{ duration: 150, y: "-100%" }}
+            out:fly={{ duration: 150, y: "-100%" }}
             class="toast-inner"
         >
             <div class="toast-content">
@@ -51,8 +51,8 @@
     .toast-container {
         display: flex;
         position: absolute;
-        left: 0;
-        bottom: 0;
+        right: 0;
+        top: 0;
         z-index: 999;
         margin: 1rem;
         flex-direction: column;
@@ -73,7 +73,9 @@
         padding: 19px;
         gap: 10px;
         align-items: left;
-        background: #1b1b1b;
+        background: #ff00001a;
+        border: 1px solid #ff0000;
+        color: #ff0000;
         border-radius: 10px;
         min-width: 231px;
         z-index: 999;
