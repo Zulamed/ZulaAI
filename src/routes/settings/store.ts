@@ -1,6 +1,9 @@
 import { writable, type Writable } from "svelte/store";
-import type { DateValue } from "../../auth/components/dateInput.svelte";
 import type { Selected } from "bits-ui";
+import type { DateValue } from "$lib/components/dateInput.svelte";
+
+export let needsPaddingChangedForMobile = writable(false);
+
 
 type Settings = {
     email: Writable<string>,

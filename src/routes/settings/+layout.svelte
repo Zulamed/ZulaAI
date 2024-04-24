@@ -4,48 +4,10 @@
     import Sidebarlinks from "$lib/components/sidebarLinks.svelte";
     import { needsPaddingChangedForMobile } from "./store";
     import { page } from "$app/stores";
-    import { fly } from "svelte/transition";
-    let searchValue = "";
+
     let isMobile = false;
     let isLoading = true;
-    let filteredHistory: History[] = [];
 
-    const names = [
-        "Alice",
-        "Bob",
-        "Charlie",
-        "David",
-        "Eve",
-        "Frank",
-        "Grace",
-        "Heidi",
-        "Ivan",
-        "Jane",
-        "Kevin",
-        "Laura",
-        "Michael",
-        "Nancy",
-        "Oliver",
-        "Peter",
-        "Quincy",
-        "Rachel",
-        "Steve",
-        "Tina",
-        "Ursula",
-        "Victor",
-        "Wendy",
-        "Xander",
-        "Yvonne",
-        "Zack",
-    ];
-
-    $: filteredHistory = history.filter((item) => {
-        const search = searchValue.toLowerCase();
-        return (
-            item.title.toLowerCase().includes(search) ||
-            item.text.toLowerCase().includes(search)
-        );
-    });
     const updateMobileStatus = () => {
         isMobile = window.innerWidth <= 1024;
     };
@@ -60,45 +22,9 @@
         };
     });
 
-    type History = {
-        title: string;
-        time: string;
-        text: string;
+    const goBack = () => {
+        history.back();
     };
-
-    let history: History[] = [
-        {
-            title: "Patient - Rashid",
-            time: "9:34 pm",
-            text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit ...`,
-        },
-    ];
-
-    function addChat() {
-        const time = new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-        });
-        const randomName = names[Math.floor(Math.random() * names.length)];
-        history.push({
-            title: `Patient - ${randomName}`,
-            time: time,
-            text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit ...`,
-        });
-        history = history;
-        const chatlist = document.querySelector(".chatlist") as HTMLDivElement;
-        requestAnimationFrame(() => {
-            chatlist.scrollTo(0, 0);
-        });
-    }
-
-    function closeChatlist() {
-        const chatlist = document.querySelector(
-            ".sidebar-chatlist",
-        ) as HTMLDivElement;
-        chatlist.style.left = "-100%";
-    }
 </script>
 
 {#if isLoading}
@@ -113,6 +39,12 @@
                 <div style="display: none;" />
             {:else}
                 <div class="header">
+                    {#if $page.url.pathname === "/settings/account" || $page.url.pathname === "/settings/password"}
+                        <a href="/settings" class="btn-back">
+                            <img src="/icons/back.svg" alt="Back" />
+                        </a>
+                    {/if}
+
                     <a href="/c">
                         <img
                             src="/logo/Grouplogo2.svg"
@@ -129,7 +61,9 @@
 
 <style>
     /* ========HEADER======== */
-
+    .btn-back {
+        display: none;
+    }
     .mobile-padding {
         padding: 36px 0px !important;
     }
@@ -191,10 +125,21 @@
     }
 
     @media (max-width: 1024px) {
+        .btn-back {
+            all: unset;
+            height: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            cursor: pointer;
+            left: 20px;
+            z-index: 1000;
+        }
         .container {
             width: 100%;
             height: 100dvh;
-            padding: 26px 39px 51px 39px;
+            padding: 36px 0;
             display: flex;
             flex-direction: column-reverse;
             justify-content: center;
@@ -212,6 +157,7 @@
             position: fixed;
             top: 20px;
             height: fit-content;
+            background: #fff;
         }
     }
 </style>

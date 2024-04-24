@@ -1,9 +1,43 @@
+.all-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.checkbox-wrapper {
+    all: unset;
+    cursor: pointer;
+    align-items: center;
+}
+
+.checkbox-label {
+    font-size: 13px;
+    font-weight: 300;
+    color: #000;
+}
+
+.checkbox-bg {
+    background-color: transparent;
+    border: 2px solid #00BCA1;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
 /* =========Tooltip========= */
+
+
 
 .tooltip-trigger {
     all: unset;
     cursor: pointer;
     position: relative;
+    width: fit-content;
+    height: fit-content;
     background-color: transparent;
 }
 
@@ -135,6 +169,11 @@
 
 .select-input.active {
     border: 1px solid #00bca1;
+
+}
+
+.select-input.deactive {
+    border: 1px solid #999999;
 
 }
 

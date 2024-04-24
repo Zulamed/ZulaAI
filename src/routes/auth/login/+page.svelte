@@ -3,7 +3,7 @@
     import Button from "../components/button.svelte";
     import Input from "../components/input.svelte";
     import { login } from "../components/store";
-    import InputPassword from "../components/inputPassword.svelte";
+    import InputPassword from "$lib/components/inputPassword.svelte";
 </script>
 
 <svelte:head>

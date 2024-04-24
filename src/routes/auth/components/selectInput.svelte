@@ -23,7 +23,7 @@
     <div class="entryarea">
         <Select.Trigger
             aria-label="Wählen Sie ihr Semester"
-            class="select-input {selected ? 'active' : ''}"
+            class="select-input"
         >
             <Select.Value placeholder="Wählen Sie ihr Semester" />
             <img class="expand-svg" src="/icons/expand.svg" alt="" />

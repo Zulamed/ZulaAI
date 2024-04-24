@@ -1,6 +1,7 @@
 <script lang="ts">
-    import InputPassword from "../../auth/components/inputPassword.svelte";
-    import { settings } from "../settings/store";
+    import InputPassword from "$lib/components/inputPassword.svelte";
+    import { settings } from "../../settings/store";
+    import Button from "../../auth/components/button.svelte";
     import {
         addNotification,
         removeNotification,
@@ -14,43 +15,46 @@
 
     $: arePasswordsNotEqual = $password !== $passwordConfirmation;
 
-    if (!$password || !$passwordConfirmation || !oldPassword) {
-        error = true;
-        if (lastToast) {
-            removeNotification(lastToast);
+    function checkValidation() {
+        let error = false;
+        if (!$password || !$passwordConfirmation || !oldPassword) {
+            error = true;
+            if (lastToast) {
+                removeNotification(lastToast);
+            }
+            lastToast = addNotification({
+                data: {
+                    fieldName: "Fehlermeldung",
+                    error: "Bitte füllen Sie alle Felder aus",
+                },
+            }).id;
+        } else if ($password !== $passwordConfirmation) {
+            error = true;
+            if (lastToast) {
+                removeNotification(lastToast);
+            }
+            lastToast = addNotification({
+                data: {
+                    fieldName: "Passwort",
+                    error: "Die Passwörter stimmen nicht überein",
+                },
+            }).id;
+        } else if (
+            $password.length < 8 ||
+            !/\d/.test($password) ||
+            !/[a-zA-Z]/.test($password)
+        ) {
+            error = true;
+            if (lastToast) {
+                removeNotification(lastToast);
+            }
+            lastToast = addNotification({
+                data: {
+                    fieldName: "Passwort",
+                    error: "Das Passwort muss mindestens 8 Zeichen lang sein und mindestens eine Zahl und einen Buchstaben enthalten",
+                },
+            }).id;
         }
-        lastToast = addNotification({
-            data: {
-                fieldName: "Fehlermeldung",
-                error: "Bitte füllen Sie alle Felder aus",
-            },
-        }).id;
-    } else if ($password !== $passwordConfirmation) {
-        error = true;
-        if (lastToast) {
-            removeNotification(lastToast);
-        }
-        lastToast = addNotification({
-            data: {
-                fieldName: "Passwort",
-                error: "Die Passwörter stimmen nicht überein",
-            },
-        }).id;
-    } else if (
-        $password.length < 8 ||
-        !/\d/.test($password) ||
-        !/[a-zA-Z]/.test($password)
-    ) {
-        error = true;
-        if (lastToast) {
-            removeNotification(lastToast);
-        }
-        lastToast = addNotification({
-            data: {
-                fieldName: "Passwort",
-                error: "Das Passwort muss mindestens 8 Zeichen lang sein und mindestens eine Zahl und einen Buchstaben enthalten",
-            },
-        }).id;
     }
 </script>
 
@@ -81,20 +85,16 @@
                     invalid={arePasswordsNotEqual}
                 />
             </div>
-            <button type="submit" class="btn-settings">Ändern</button>
+            <Button
+                buttonText="Ändern"
+                onClick={checkValidation}
+                buttonType="submit"
+            />
         </form>
     </div>
 </div>
 
 <style>
-    .btn-settings {
-        all: unset;
-        cursor: pointer;
-        padding: 12px 54px;
-        background-color: #00bca1;
-        color: #fff;
-        border-radius: 8px;
-    }
     /* =========header========= */
 
     .title {
@@ -163,12 +163,12 @@
 
         .input-group {
             width: 43%;
-            height: 396px;
+            height: fit-content;
             gap: 18px;
-            padding: 0 16px 0 0;
+            padding: 10px 16px 0 0;
         }
         .settings {
-            gap: 71px;
+            gap: 50px;
             padding: 0;
         }
     }
@@ -194,7 +194,7 @@
         }
         .settings {
             gap: 14px;
-            height: 412.517px;
+            height: 335px;
             padding: 0 0 14px 0;
         }
     }

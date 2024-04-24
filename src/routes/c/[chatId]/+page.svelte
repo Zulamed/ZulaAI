@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Rules from "$lib/components/rules.svelte";
     import { onMount } from "svelte";
     import { writable } from "svelte/store";
     import { fly } from "svelte/transition";
@@ -127,17 +128,28 @@
         history.back();
     }
 
-    function openPopup() {
+    function openRulesPopup() {
         const popup = document.querySelector(
-            ".popup-overlay",
+            ".rules-overlay",
         ) as HTMLDivElement;
         popup.style.display = "flex";
     }
-    function closePopup() {
+
+    function closeRulesPopup() {
         const popup = document.querySelector(
-            ".popup-overlay",
+            ".rules-overlay",
         ) as HTMLDivElement;
         popup.style.display = "none";
+    }
+
+    function openEcgPopup() {
+        const ecg = document.querySelector(".ecg-overlay") as HTMLDivElement;
+        ecg.style.display = "flex";
+    }
+
+    function closeEcgPopup() {
+        const ecg = document.querySelector(".ecg-overlay") as HTMLDivElement;
+        ecg.style.display = "none";
     }
 </script>
 
@@ -151,52 +163,28 @@
         </a>
     </div>
     <div class="chatbox">
-        <div class="popup-overlay">
-            <div class="popup">
+        <div class="ecg-overlay">
+            <div class="ecg-popup">
+                <button class="close-popup" on:click={closeEcgPopup}
+                    ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#00BCA1"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-x"
+                        ><path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
                 <div class="popup-header">
-                    <h2 class="popup-title">Testergebnisse</h2>
-                    <button class="close-popup" on:click={closePopup}>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#00BCA1"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="lucide lucide-x"
-                            ><path d="M18 6L6 18M6 6l12 12" />
-                        </svg>
-                    </button>
+                    <h2 class="popup-title">ECG</h2>
                 </div>
                 <div class="popup-content">
                     <p class="popup-text">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nunc consequat justo vel porta mattis. Nunc eleifend mi
-                        velit, eu tincidunt ex fermentum eget. Sed id malesuada
-                        nibh, sit amet varius mi. Cras luctus enim et justo
-                        aliquet, vel consequat quam pretium. Vivamus maximus
-                        lectus eget mauris egestas maximus. Cras tincidunt neque
-                        et ex ultricies scelerisque. Nunc venenatis sem vitae
-                        tortor consectetur, eget lacinia velit egestas. Praesent
-                        sollicitudin eget ligula at vehicula. Proin eget dui
-                        fermentum, accumsan velit vel, aliquet erat. Vivamus
-                        quis urna finibus, convallis purus rutrum, laoreet
-                        libero. Maecenas quis tristique justo, vitae rutrum
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Nunc consequat justo vel porta mattis. Nunc eleifend mi
-                        velit, eu tincidunt ex fermentum eget. Sed id malesuada
-                        nibh, sit amet varius mi. Cras luctus enim et justo
-                        aliquet, vel consequat quam pretium. Vivamus maximus
-                        lectus eget mauris egestas maximus. Cras tincidunt neque
-                        et ex ultricies scelerisque. Nunc venenatis sem vitae
-                        tortor consectetur, eget lacinia velit egestas. Praesent
-                        sollicitudin eget ligula at vehicula. Proin eget dui
-                        fermentum, accumsan velit vel, aliquet erat. Vivamus
-                        quis urna finibus, convallis purus rutrum, laoreet
-                        libero. Maecenas quis tristique justo, vitae rutrum
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                         Nunc consequat justo vel porta mattis. Nunc eleifend mi
                         velit, eu tincidunt ex fermentum eget. Sed id malesuada
@@ -243,14 +231,117 @@
                         imperdiet porta malesuada. Sed facilisis, velit ut
                         faucibus feugiat, nisl sem fermentum massa, ac aliquet
                         leo ligula a arcu. Vivamus a nulla vel dui placerat
+                        rutrum. Lorem ipsum dolor sit amet, consectetur
+                        adipiscing elit. Nunc consequat justo vel porta mattis.
+                        Nunc eleifend mi velit, eu tincidunt ex fermentum eget.
+                        Sed id malesuada nibh, sit amet varius mi. Cras luctus
+                        enim et justo aliquet, vel consequat quam pretium.
+                        Vivamus maximus lectus eget mauris egestas maximus. Cras
+                        tincidunt neque et ex ultricies scelerisque. Nunc
+                        venenatis sem vitae tortor consectetur, eget lacinia
+                        velit egestas. Praesent sollicitudin eget ligula at
+                        vehicula. Proin eget dui fermentum, accumsan velit vel,
+                        aliquet erat. Vivamus quis urna finibus, convallis purus
+                        rutrum, laoreet libero. Maecenas quis tristique justo,
+                        vitae rutrum tortor. Nulla semper lectus nec justo
+                        dapibus efficitur ac a tellus. Vivamus laoreet erat in
+                        enim rhoncus, eget feugiat turpis dapibus. Maecenas
+                        consequat ac turpis quis hendrerit. Vestibulum nec elit
+                        eget mi pharetra suscipit vel vitae ex. Aliquam at elit
+                        non risus facilisis vulputate a accumsan felis. Quisque
+                        et sem quis quam posuere tincidunt. Curabitur faucibus
+                        ex ac quam gravida, at scelerisque ex aliquet. Aenean
+                        imperdiet porta malesuada. Sed facilisis, velit ut
+                        faucibus feugiat, nisl sem fermentum massa, ac aliquet
+                        leo ligula a arcu. Vivamus a nulla vel dui placerat
+                        rutrum. Lorem ipsum dolor sit amet, consectetur
+                        adipiscing elit. Nunc consequat justo vel porta mattis.
+                        Nunc eleifend mi velit, eu tincidunt ex fermentum eget.
+                        Sed id malesuada nibh, sit amet varius mi. Cras luctus
+                        enim et justo aliquet, vel consequat quam pretium.
+                        Vivamus maximus lectus eget mauris egestas maximus. Cras
+                        tincidunt neque et ex ultricies scelerisque. Nunc
+                        venenatis sem vitae tortor consectetur, eget lacinia
+                        velit egestas. Praesent sollicitudin eget ligula at
+                        vehicula. Proin eget dui fermentum, accumsan velit vel,
+                        aliquet erat. Vivamus quis urna finibus, convallis purus
+                        rutrum, laoreet libero. Maecenas quis tristique justo,
+                        vitae rutrum tortor. Nulla semper lectus nec justo
+                        dapibus efficitur ac a tellus. Vivamus laoreet erat in
+                        enim rhoncus, eget feugiat turpis dapibus. Maecenas
+                        consequat ac turpis quis hendrerit. Vestibulum nec elit
+                        eget mi pharetra suscipit vel vitae ex. Aliquam at elit
+                        non risus facilisis vulputate a accumsan felis. Quisque
+                        et sem quis quam posuere tincidunt. Curabitur faucibus
+                        ex ac quam gravida, at scelerisque ex aliquet. Aenean
+                        imperdiet porta malesuada. Sed facilisis, velit ut
+                        faucibus feugiat, nisl sem fermentum massa, ac aliquet
+                        leo ligula a arcu. Vivamus a nulla vel dui placerat
                         rutrum.
                     </p>
                 </div>
             </div>
         </div>
 
+        <div class="rules-overlay">
+            <div class="popup">
+                <button class="close-rulespopup" on:click={closeRulesPopup}
+                    ><svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#00BCA1"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-x"
+                        ><path d="M18 6L6 18M6 6l12 12" />
+                    </svg></button
+                >
+                <div class="popup-header">
+                    <h2 class="popup-title">
+                        Willkommen bei einer Simulation mit ZulaMed
+                    </h2>
+                </div>
+                <div class="popup-content">
+                    <Rules />
+                </div>
+            </div>
+        </div>
+
+        <button class="info-button" on:click={openRulesPopup}>
+            <img src="/icons/info.svg" alt="info" />
+        </button>
+
         <div class="messages-wrapper">
-            <!-- ==========MESSAGE========== -->
+            <!-- ==========MESSAGE MEDICAL RECORD========== -->
+            <div class="message incoming medical-record">
+                <div
+                    class="message-full"
+                    style="display: flex; flex-direction: column;"
+                >
+                    <img class="sender-img" src="/icons/user.jpg" alt="" />
+                    <div class="message-info">
+                        <h2 class="message-sender">Medizinische Karte</h2>
+                    </div>
+                    <div class="message-content">
+                        <p class="content-text">
+                            Lorem ipsum dolor sit amet consectetur, adipisicing
+                            elit. At magni officiis animi quis autem? Inventore
+                            perferendis enim dolore cupiditate, expedita quo
+                            recusandae a labore voluptates amet odio magnam
+                            reprehenderit eaque fugit deleniti porro officia ab
+                            praesentium minima iure. Eum et doloribus, odio
+                            incidunt harum repellendus provident consequuntur
+                            nisi corporis dolores. Lorem ipsum dolor sit amet.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- ==========MESSAGE MEDICAL RECORD========== -->
+            <!-- ==========MESSAGE BOT TEST========== -->
             <div class="message incoming-error">
                 <div
                     class="message-full"
@@ -268,9 +359,52 @@
                     </div>
                 </div>
             </div>
-            <!-- ==========MESSAGE========== -->
+            <!-- ==========MESSAGE BOT TEST========== -->
 
-            <!-- ==========MESSAGE========== -->
+            <!-- ==========MESSAGE ECG========== -->
+            <div class="message incoming">
+                <div
+                    class="message-full"
+                    style="display: flex; flex-direction: column;"
+                >
+                    <img class="sender-img" src="/icons/user.jpg" alt="" />
+                    <div class="message-info">
+                        <h2 class="message-sender">Ergebnisse</h2>
+                    </div>
+                    <div class="message-content result">
+                        <p class="content-text">ECG</p>
+                        <button class="popup-btn" on:click={openEcgPopup}>
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="#FFFFFF"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="lucide lucide-clipboard-plus"
+                                ><rect
+                                    width="8"
+                                    height="4"
+                                    x="8"
+                                    y="2"
+                                    rx="1"
+                                    ry="1"
+                                /><path
+                                    d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+                                /><path d="M9 14h6" /><path
+                                    d="M12 17v-6"
+                                /></svg
+                            >
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- ==========MESSAGE ECG========== -->
+
+            <!-- ==========MESSAGE PRELOADER========== -->
             <div class="message incoming-typing">
                 <div
                     class="message-full"
@@ -290,8 +424,8 @@
                     </div>
                 </div>
             </div>
-            <!-- ==========MESSAGE========== -->
-            <!-- ==========MESSAGE========== -->
+            <!-- ==========MESSAGE PRELOADER========== -->
+            <!-- ==========MESSAGE OUTGOING========== -->
             {#each messages as message}
                 <div
                     transition:fly={{ y: 7, duration: 150 }}
@@ -313,43 +447,50 @@
                         <div class="message-content">
                             <p class="content-text">
                                 {message.text}
-                                {#if message.isUser}
-                                    <button
-                                        on:click={openPopup}
-                                        class="popup-btn"
-                                    >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="14"
-                                            height="14"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="#FFFFFF"
-                                            stroke-width="2"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            class="lucide lucide-clipboard-plus"
-                                            ><rect
-                                                width="8"
-                                                height="4"
-                                                x="8"
-                                                y="2"
-                                                rx="1"
-                                                ry="1"
-                                            /><path
-                                                d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
-                                            /><path d="M9 14h6" /><path
-                                                d="M12 17v-6"
-                                            /></svg
-                                        >
-                                    </button>
-                                {/if}
                             </p>
                         </div>
                     </div>
+                    {#if !message.isUser}
+                        <div class="rate-buttons">
+                            <button title="Like" class="rate-btn like">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="#00BCA1"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="lucide lucide-thumbs-up"
+                                    ><path d="M7 10v12" /><path
+                                        d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"
+                                    /></svg
+                                >
+                            </button>
+                            <button title="Dislike" class="rate-btn dislike">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="#00BCA1"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="lucide lucide-thumbs-down"
+                                    ><path d="M17 14V2" /><path
+                                        d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22h0a3.13 3.13 0 0 1-3-3.88Z"
+                                    /></svg
+                                >
+                            </button>
+                        </div>
+                    {/if}
                 </div>
             {/each}
-            <!-- ==========MESSAGE========== -->
+            <!-- ==========MESSAGE OUTGOING========== -->
         </div>
 
         <div class="messagebox-wrapper">
@@ -386,6 +527,148 @@
 </div>
 
 <style>
+    .rate-buttons {
+        display: flex;
+        gap: 5px;
+        padding: 0 45px;
+    }
+    .rate-btn {
+        all: unset;
+        cursor: pointer;
+        border-radius: 50%;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .rate-btn:hover,
+    .rate-btn:active {
+        background-color: #d9d9d9;
+    }
+
+    .rate-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* =========popup========= */
+    .close-rulespopup {
+        all: unset;
+        cursor: pointer;
+        position: absolute;
+        right: 27px;
+        top: 25px;
+        background-color: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+    }
+
+    .close-rulespopup:hover {
+        background-color: #f4f4f4;
+        border-radius: 50%;
+    }
+    .ecg-overlay {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #00000033;
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .ecg-popup {
+        width: 100%;
+        max-width: 800px;
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 36px 70px 19px 70px;
+        position: relative;
+        color: #000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .popup-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #000;
+        text-align: center;
+    }
+
+    .rules-overlay {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #00000033;
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .rules-overlay .popup {
+        width: 100%;
+        max-width: 800px;
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 36px 70px 19px 70px;
+        position: relative;
+        color: #000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .popup-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #000;
+        text-align: center;
+    }
+    .popup-content {
+        height: 500px;
+        overflow-y: scroll;
+        scrollbar-width: thin;
+        scrollbar-color: #00bca1 #f5f5f5;
+        margin-bottom: 8px;
+    }
+
+    .popup-content::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .popup-content::-webkit-scrollbar-thumb {
+        background-color: #00bca1;
+        border-radius: 10px;
+    }
+
+    .popup-content::-webkit-scrollbar-track {
+        background-color: #f5f5f5;
+    }
+
+    /* =========popup========= */
+
+    .info-button {
+        position: absolute;
+        top: 23px;
+        right: 23px;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+    .info-button img {
+        width: 28px;
+        height: 28px;
+    }
     /* =========popup========= */
 
     .popup-overlay {
@@ -428,6 +711,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-bottom: 15px;
     }
     .close-popup {
         all: unset;
@@ -628,6 +912,14 @@
         color: #000000;
     }
 
+    .message-content.result {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #dcefed !important;
+        border: 1px solid #00bca1 !important;
+    }
+
     .content-text {
         white-space: pre-wrap;
         word-break: break-word;
@@ -636,7 +928,13 @@
         align-items: center;
         gap: 6px;
     }
-
+    .message.incoming.medical-record .message-content {
+        background: #dcefed;
+        border: 1px solid #00bca1;
+    }
+    .message.incoming.medical-record .message-content p {
+        white-space: unset;
+    }
     .message.incoming .message-content,
     .message.incoming-typing .message-content {
         background: #fff;
@@ -741,19 +1039,88 @@
     }
 
     @media (max-width: 1440px) {
+        .ecg-popup {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 19px 20px 19px 20px;
+            position: relative;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: auto !important;
+        }
+        .close-popup {
+            top: 10px;
+            right: 10px;
+        }
+        .popup-header {
+            margin-bottom: 10px;
+        }
+        .info-button {
+            top: 12px;
+            right: 12px;
+        }
+
+        .info-button img {
+            width: 24px;
+            height: 24px;
+        }
         /* =========popup========= */
 
-        .popup {
-            padding: 38px 42px;
-            max-width: 660px;
-            max-height: 522px;
-        }
         .popup-title {
             font-size: 15px;
+            margin-bottom: 0px;
         }
 
         .popup-text {
             font-size: 13px;
+        }
+
+        .popup-overlay {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #00000033;
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .rules-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #00000033;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .rules-overlay .popup {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 36px 70px 19px 70px;
+            position: relative;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: auto !important;
+        }
+        .popup-content {
+            height: 300px;
+            padding: 0 7px;
         }
 
         /* =========popup========= */
@@ -865,7 +1232,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            align-items: end;
+            align-items: start;
             gap: 10px;
             width: 100%;
         }
@@ -873,6 +1240,10 @@
             display: flex;
             align-items: end;
             gap: 20px;
+            padding: 0 40px;
+        }
+
+        .rate-buttons {
             padding: 0 40px;
         }
 
@@ -909,6 +1280,53 @@
     }
 
     @media (max-width: 1024px) {
+        .ecg-popup {
+            width: 100%;
+            max-width: 100%;
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 36px 16px 19px 16px;
+            position: relative;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100dvh !important;
+            border-radius: 0;
+        }
+
+        .popup-header {
+            margin-bottom: 12px;
+        }
+
+        .info-button {
+            top: 12px;
+            right: 12px;
+            z-index: 105;
+        }
+
+        .rate-buttons {
+            padding: 0 30px;
+        }
+        .info-button img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .rules-overlay .popup {
+            max-width: 100%;
+            padding: 36px 20px 19px 20px;
+            height: 100dvh !important;
+            border-radius: 0;
+        }
+        .close-rulespopup {
+            right: 6px;
+            top: 6px;
+        }
+        .popup-content {
+            height: 100%;
+            padding: 0 7px;
+        }
         /* =========popup========= */
 
         .popup {
@@ -935,7 +1353,7 @@
             border-radius: 0;
             background-color: #fff;
             position: inherit;
-            padding-top: 83px;
+            padding-top: 64px;
             gap: 0;
         }
 
@@ -948,7 +1366,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 24px 23px 10px 23px;
+            padding: 24px 23px 24px 23px;
             background: #fff;
             border-top: 1px solid #f5f5f5;
         }

@@ -73,7 +73,7 @@
         padding: 19px;
         gap: 10px;
         align-items: left;
-        background: #ff00001a;
+        background: #ffe5e5;
         border: 1px solid #ff0000;
         color: #ff0000;
         border-radius: 10px;

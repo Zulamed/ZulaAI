@@ -2,6 +2,7 @@
     import { Tooltip } from "bits-ui";
     import { fly } from "svelte/transition";
     export let tooltipText = "";
+    export let tooltipSide = "right" as "top" | "bottom" | "left" | "right";
 </script>
 
 <Tooltip.Root openDelay={0}>
@@ -9,7 +10,7 @@
         <slot name="trigger" />
     </Tooltip.Trigger>
     <Tooltip.Content
-        side="right"
+        side={tooltipSide}
         class="tooltip-content"
         transition={fly}
         transitionConfig={{ x: -7, duration: 100 }}

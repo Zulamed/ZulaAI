@@ -1,5 +1,5 @@
 import { writable, type Writable } from "svelte/store";
-import type { DateValue } from "./dateInput.svelte";
+import type { DateValue } from "$lib/components/dateInput.svelte";
 import type { Selected } from "bits-ui";
 
 // export const register = writable({

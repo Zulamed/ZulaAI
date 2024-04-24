@@ -1,7 +1,7 @@
 <script lang="ts">
     import Button from "../components/button.svelte";
     import Input from "../components/input.svelte";
-    import InputPassword from "./inputPassword.svelte";
+    import InputPassword from "$lib/components/inputPassword.svelte";
     import SelectInput from "./selectInput.svelte";
     import { firstStep, secondStep, thirdStep } from "./store";
     import { get } from "svelte/store";
@@ -9,7 +9,7 @@
         addNotification,
         removeNotification,
     } from "$lib/components/alert.svelte";
-    import DateInput from "./dateInput.svelte";
+    import DateInput from "$lib/components/dateInput.svelte";
 
     export let currentStep = 1;
 

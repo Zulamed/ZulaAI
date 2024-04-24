@@ -1,8 +1,8 @@
 <script lang="ts">
     import Input from "../../auth/components/input.svelte";
-    import DateInput from "../../auth/components/dateInput.svelte";
+    import DateInput from "$lib/components/dateInput.svelte";
     import SelectInput from "../../auth/components/selectInput.svelte";
-    import { settings } from "./store";
+    import { settings } from ".././store";
 </script>
 
 <svelte:head>
@@ -19,12 +19,7 @@
                     inputPlaceholder="E-Mail-Adresse"
                     value={settings.email}
                 />
-                <Input
-                    inputId="password"
-                    inputType="password"
-                    inputPlaceholder="Password"
-                    value={settings.password}
-                />
+
                 <Input
                     inputId="vorname"
                     inputType="text"
@@ -130,9 +125,9 @@
 
         .input-group {
             width: 43%;
-            height: 396px;
+            height: 402px;
             gap: 18px;
-            padding: 0 16px 0 0;
+            padding: 9px 16px 0 0;
         }
         .settings {
             gap: 71px;

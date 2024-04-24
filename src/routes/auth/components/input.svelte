@@ -201,6 +201,20 @@
             top: 50%;
             transform: translateY(-50%);
         }
+        .input.focus {
+            border-color: #00bca1;
+        }
+
+        .input.valid {
+            color: #616163;
+            border-color: #00bca1;
+        }
+        .input.invalid {
+            border-color: red;
+        }
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0px 1000px white inset;
+        }
 
         input:focus + .labelline,
         input:valid + .labelline {
@@ -217,13 +231,6 @@
             color: #00bca1 !important;
             background-color: white !important;
             padding: 0 10px !important;
-        }
-        input[type="email"]:user-invalid + .labelline {
-            top: 0;
-            transform: translateY(-50%) translateX(10px);
-            color: red;
-            background-color: white;
-            padding: 0 10px;
         }
     }
 
@@ -260,17 +267,6 @@
             color: #00bca1 !important;
             background-color: white !important;
             padding: 0 10px !important;
-        }
-        input[type="email"]:user-invalid {
-            border: 1px solid red;
-        }
-
-        input[type="email"]:user-invalid + .labelline {
-            top: 0;
-            transform: translateY(-50%) translateX(10px);
-            color: red;
-            background-color: white;
-            padding: 0 10px;
         }
 
         input[type="number"]:user-invalid {
