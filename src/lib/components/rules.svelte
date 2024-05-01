@@ -1,5 +1,5 @@
 <p>
-    Hier werden durch künstliche Intelligenz zufällige klinische Fälle
+    Hier werden mit Hilfe künstlicher Intelligenz zufällige klinische Fälle
     generiert. Die Simulation ist in Form eines Chats designt, sodass Sie mit
     dem Patienten realistische Gespräche führen und Diagnosen stellen können.
     <br />
@@ -13,33 +13,24 @@
 
 <ul>
     <li>
-        Hinweise, wie man effektiv mit dem virtuellen Patienten kommuniziert,
-        inklusive Beispiele für gute Fragen und wie man relevante Informationen
-        sammelt.
-    </li>
-    <li>
-        Anleitung, wie man auf die Antworten des virtuellen Patienten reagieren
-        sollte, um eine möglichst realitätsnahe Erfahrung zu gewährleisten.
-    </li>
-    <li>
         Jede Nachricht im Chat wird von der KI als ein Dialog zwischen Ihnen und
-        dem „Patienten“ interpretiert, und Zula wird Ihnen als „Patient/in“
-        antworten
+        dem „Patienten“ interpretiert. ZULA wird Ihnen als „Patient/in“
+        antworten.
     </li>
     <li>
         Um das realistische Gefühl der Simulation zu steigern, wurde ZULA so
         programmiert, dass sie emotional auf Ihre Interaktionen reagiert. Wir
-        bitten Sie, diese simulierten Emotionen zu beachten und gegebenenfalls
-        angemessen darauf zu reagieren. Sollten die gezeigten Emotionen in Bezug
-        auf Kontext oder Sinnhaftigkeit fehlerhaft sein, bitten wir um eine
-        Meldung über den entsprechenden Button.
+        bitten Sie, diese simulierten Emotionen zu beachten und angemessen
+        darauf zu reagieren. Sollten die gezeigten Emotionen in Bezug auf
+        Kontext oder Sinnhaftigkeit fehlerhaft sein, bitten wir um eine Meldung
+        über den entsprechenden Button.
     </li>
     <li>
-        ZULA ist eine KI und kann aufgrund technischer Beschränkungen oder
-        fehlenden Lerninhalten bestimmte Wahrnehmungsfehler aufweisen. Sollten
-        Unklarheiten auftreten, formulieren Sie Ihre Fragen bitte erneut. Bei
-        wiederholt auftretenden Fehlern kontaktieren Sie uns bitte über den
-        entsprechenden Button.
+        ZULA basiert auf einer KI und kann aufgrund technischer Beschränkungen
+        oder fehlenden Lerninhalten bestimmte Wahrnehmungsfehler aufweisen.
+        Sollten Unklarheiten auftreten, formulieren Sie Ihre Fragen bitte
+        erneut. Bei wiederholt auftretenden Problemen kontaktieren Sie uns bitte
+        über den entsprechenden Button.
     </li>
 </ul>
 <br />
@@ -48,16 +39,13 @@
 
 <ul>
     <li>
-        Wenn Sie unterschiedliche Untersuchungen anfordern möchten, dann müssen
-        Sie am Anfang der Nachricht einen speziellen Befehlscode ( :// )
-        verwenden.
+        Wenn Sie Untersuchungen anfordern möchten, dann müssen Sie zu Beginn der
+        Nachricht einen speziellen Befehlscode ( :// ) verwenden.
         <ul>
             <li>
                 Zum Beispiel: „:// Ich möchte eine Röntgenuntersuchung anmelden“
             </li>
-            <li>
-                Oder: „:// Vitalparameter vom Pflegepersonal abfragen lassen“
-            </li>
+            <li>Oder: „:// Vitalparameter vom Pflegepersonal abfragen“</li>
             <li>
                 Die genaue Formulierung Ihrer Anfrage ist nicht entscheidend, es
                 muss jedoch eine klare Anordnung für eine spezifische
@@ -68,7 +56,7 @@
                 Als Antwort erhalten Sie eine Nachricht mit den Ergebnissen der
                 angeforderten Untersuchung. Nach dem Schließen dieses Fensters
                 können Sie jederzeit diese Untersuchung wieder aufrufen. Dazu
-                klicken Sie auf den Button (XXX) bei der jeweiligen Nachricht im
+                klicken Sie auf den Befundbutton bei der jeweiligen Nachricht im
                 Chat.
             </li>
         </ul>
@@ -80,15 +68,18 @@
 
 <ul>
     <li>
-        Bitte beachten Sie, dass ZULA noch technische als auch medizinische
-        Fehler machen kann, und dabei benötigen wir Ihre Unterstützung. Melden
-        Sie alle Fehler, die Ihnen auffallen, mit dem ICON (XXX). Wir werden
-        alle diese Fehler bearbeiten und beheben. Helfen Sie ZULA, sich zu
-        verbessern. Jede Hilfe zählt.
+        Bitte beachten Sie, dass ZULA sowohl technische als auch medizinische
+        Fehler machen kann.
     </li>
     <li>
-        Sie können jederzeit das Hilfefenster aufrufen, um die Nutzungsregeln
-        einzusehen, indem Sie auf den Button (XXX) klicken.
+        Um Ihnen eine realistische und medizinisch korrekte Simulation anbieten
+        zu können, benötigen wir Ihre Unterstützung. Bitte melden Sie Fehler
+        über den entsprechenden Button. Helfen Sie ZULA, sich zu verbessern.
+        Jede Hilfe zählt.
+    </li>
+    <li>
+        Sie können jederzeit das Hilfefenster aufrufen, um die Nutzungshinweise
+        einzusehen, indem Sie auf den Informationsbutton klicken.
     </li>
 </ul>
 
