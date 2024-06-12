@@ -1,15 +1,20 @@
 <script lang="ts">
 	import Rules from "$lib/components/rules.svelte";
+	import RatingSlider from "$lib/components/ratingSlider.svelte";
 	import { onMount } from "svelte";
 	import { writable, type Writable } from "svelte/store";
 	import { fly } from "svelte/transition";
 	import TooltipMelt from "$lib/components/tooltipMelt.svelte";
 	import { melt } from "@melt-ui/svelte";
 	import { addNotification } from "$lib/components/snackbar.svelte";
+	import { chatHistory } from "$lib/stores/history";
+	import { page } from "$app/stores";
+	import { redirect } from "@sveltejs/kit";
 
 	let isMobile = false;
 	let isLoading = true;
 	let isOpen = false;
+	let solved = false;
 
 	const updateMobileStatus = () => {
 		isMobile = window.innerWidth <= 1024;
@@ -37,28 +42,20 @@
 		showDislikeFeedback: boolean;
 		showLikeFeedback: boolean;
 		buttonStates: boolean[];
+		signalSolve: boolean;
 	};
 
 	let messages: Message[] = [
 		{
 			isUser: false,
 			sender: "Patient",
-			senderImg: "/icons/user.jpg",
+			senderImg: "/icons/patient.png",
 			time: "9:34 pm",
 			text: `Test message. Need an API to work correctly.`,
 			showDislikeFeedback: false,
 			showLikeFeedback: false,
-			buttonStates: [false, false, false, false]
-		},
-		{
-			isUser: false,
-			sender: "Patient",
-			senderImg: "/icons/user.jpg",
-			time: "9:34 pm",
-			text: `Test message.`,
-			showDislikeFeedback: false,
-			showLikeFeedback: false,
-			buttonStates: [false, false, false, false]
+			buttonStates: [false, false, false, false],
+			signalSolve: false
 		}
 	];
 
@@ -68,20 +65,34 @@
 			minute: "2-digit",
 			hour12: true
 		});
-		if (inputValue.trim() !== "") {
-			messages.push({
-				isUser: true,
-				sender: "Sie",
-				senderImg: "/icons/user.jpg",
-				time: time,
-				text: inputValue,
-				showDislikeFeedback: false,
-				showLikeFeedback: false,
-				buttonStates: [false, false, false, false]
-			});
-			messages = messages;
-		} else {
+		let trimmedValue = inputValue.trim();
+		if (!trimmedValue) {
 			return;
+		}
+
+		let message: Message = {
+			isUser: true,
+			sender: "Sie",
+			senderImg: "",
+			time: time,
+			text: inputValue,
+			showDislikeFeedback: false,
+			showLikeFeedback: false,
+			buttonStates: [false, false, false, false],
+			signalSolve: true
+		};
+
+		messages.push(message);
+		messages = messages;
+
+		if (message.signalSolve) {
+			solved = true;
+			let id = parseInt($page.params.chatId);
+			let historyItem = $chatHistory.find((x) => x.id === id);
+			if (historyItem) {
+				historyItem.isSolved = true;
+				$chatHistory = $chatHistory;
+			}
 		}
 
 		inputValue = "";
@@ -140,6 +151,20 @@
 
 	function goBack() {
 		history.back();
+	}
+
+	function goHome() {
+		window.location.href = "/c";
+	}
+
+	function openChatFeedbackPopup() {
+		const chatFeedbackOverlay = document.querySelector(".chat-feedback-overlay") as HTMLDivElement;
+		chatFeedbackOverlay.style.display = "flex";
+	}
+
+	function closeChatFeedbackPopup() {
+		const chatFeedbackOverlay = document.querySelector(".chat-feedback-overlay") as HTMLDivElement;
+		chatFeedbackOverlay.style.display = "none";
 	}
 
 	function openRulesPopup() {
@@ -201,6 +226,10 @@
 	let popupMessage: Message;
 </script>
 
+<svelte:head>
+	<title>ZulaAI - Chat</title>
+</svelte:head>
+
 <div class="main">
 	<!-- ===================FEEDBACK POPUP=================== -->
 
@@ -209,6 +238,7 @@
 			<div class="feedback-popup">
 				<form
 					method="post"
+					action="/submit-feedback"
 					on:submit={(e) => {
 						e?.preventDefault();
 						addNotification({
@@ -285,10 +315,13 @@
 						</div>
 						<div class="feedback-submit">
 							<button
-								on:click={closeFeedbackPopup}
+								type="submit"
+								on:click={() => {
+									closeFeedbackPopup();
+									closePreFeedback(popupMessage);
+								}}
 								class:disabled={popupMessage.buttonStates.every((x) => !x)}
-								disabled={popupMessage.buttonStates.every((x) => !x)}
-								type="submit">Abgeben</button
+								disabled={popupMessage.buttonStates.every((x) => !x)}>Abgeben</button
 							>
 						</div>
 					</div>
@@ -300,7 +333,7 @@
 	<!-- ===================FEEDBACK POPUP=================== -->
 
 	<div class="chatlist-header">
-		<button on:click={goBack} class="btn-back">
+		<button on:click={goHome} class="btn-back">
 			<img src="/icons/back.svg" alt="Back" />
 		</button>
 		<a href="/c">
@@ -308,6 +341,46 @@
 		</a>
 	</div>
 	<div class="chatbox">
+		<div class="chat-feedback-overlay">
+			<form action="" method="post">
+				<div class="chat-feedback-popup">
+					<div>
+						<button type="button" class="close-popup" on:click={closeChatFeedbackPopup}
+							><svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="#00BCA1"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								class="lucide lucide-x"
+								><path d="M18 6L6 18M6 6l12 12" />
+							</svg>
+						</button>
+
+						<div class="popup-header">
+							<h2 class="popup-title">Teilen Sie Ihre Meinung mit uns</h2>
+						</div>
+
+						<div class="rating-sliders-wrapper" style="margin-top: 33px;">
+							<RatingSlider question="ZULA ist einfach zu verwenden." />
+							<RatingSlider question="ZULA hat ein intuitives Interface." />
+							<RatingSlider
+								question="ZULA hilft mir einen großen Überblick über Krankheiten, Diagnostik und Therapie zu erhalten, um schneller Entscheidungen zu treffen."
+							/>
+							<RatingSlider question="Ich kann ZULA in mein Lernfeld als Hilfsmedium integrieren." />
+							<RatingSlider question="ZULA gibt medizinisch genaue Informationen." />
+							<RatingSlider question="Ich würde ZULA einem Freund oder Kollegen weiterempfehlen." />
+						</div>
+					</div>
+					<button type="submit" class="chat-feedback-btn">Feedback senden</button>
+				</div>
+			</form>
+		</div>
+
 		<div class="ecg-overlay">
 			<div class="ecg-popup">
 				<button class="close-popup" on:click={closeEcgPopup}
@@ -369,17 +442,12 @@
 			<!-- ==========MESSAGE MEDICAL RECORD========== -->
 			<div class="message incoming medical-record">
 				<div class="message-full" style="display: flex; flex-direction: column;">
-					<img class="sender-img" src="/icons/user.jpg" alt="" />
+					<img class="sender-img" src="/icons/description.png" alt="" />
 					<div class="message-info">
-						<h2 class="message-sender">Medizinische Karte</h2>
+						<h2 class="message-sender">Fallbeschreibung</h2>
 					</div>
 					<div class="message-content">
-						<p class="content-text">
-							Lorem ipsum dolor sit amet consectetur, adipisicing elit. At magni officiis animi quis autem? Inventore
-							perferendis enim dolore cupiditate, expedita quo recusandae a labore voluptates amet odio magnam
-							reprehenderit eaque fugit deleniti porro officia ab praesentium minima iure. Eum et doloribus, odio
-							incidunt harum repellendus provident consequuntur nisi corporis dolores. Lorem ipsum dolor sit amet.
-						</p>
+						<p class="content-text">Test medical record. Need an API to work correctly.</p>
 					</div>
 				</div>
 			</div>
@@ -387,7 +455,7 @@
 			<!-- ==========MESSAGE BOT TEST========== -->
 			<div class="message incoming-error">
 				<div class="message-full" style="display: flex; flex-direction: column;">
-					<img class="sender-img" src="/icons/user.jpg" alt="" />
+					<img class="sender-img" src="/icons/patient.png" alt="" />
 					<div class="message-info">
 						<h2 class="message-sender">Patient</h2>
 						<span class="message-time">20:31 am</span>
@@ -402,7 +470,7 @@
 			<!-- ==========MESSAGE ECG========== -->
 			<div class="message incoming">
 				<div class="message-full" style="display: flex; flex-direction: column;">
-					<img class="sender-img" src="/icons/user.jpg" alt="" />
+					<img class="sender-img" src="/icons/description.png" alt="" />
 					<div class="message-info">
 						<h2 class="message-sender">Ergebnisse</h2>
 					</div>
@@ -433,7 +501,7 @@
 			<!-- ==========MESSAGE PRELOADER========== -->
 			<div class="message incoming-typing">
 				<div class="message-full" style="display: flex; flex-direction: column;">
-					<img class="sender-img" src="/icons/user.jpg" alt="" />
+					<img class="sender-img" src="/icons/patient.png" alt="" />
 					<div class="message-info">
 						<h2 class="message-sender">Patient</h2>
 						<span class="message-time">19:34 pm</span>
@@ -452,7 +520,9 @@
 			{#each messages as message}
 				<div transition:fly={{ y: 7, duration: 150 }} class="message {message.isUser ? 'outgoing' : 'incoming'}">
 					<div class="message-full" style="display: flex; flex-direction: column;">
-						<img class="sender-img" src={message.senderImg} alt="" />
+						{#if message.sender === "Patient"}
+							<img class="sender-img" src="/icons/patient.png" alt="" />
+						{/if}
 						<div class="message-info">
 							<h2 class="message-sender">{message.sender}</h2>
 							<span class="message-time">{message.time}</span>
@@ -619,72 +689,51 @@
 										class:disabled={message.buttonStates.every((x) => !x)}
 										disabled={message.buttonStates.every((x) => !x)}
 										on:click={() => closePreFeedback(message)}
-										class="prefeedback-submit">Schreiben Sie eine Rezension</button
+										class="prefeedback-submit">Teilen Sie uns Ihre Meinung mit</button
 									>
 								</div>
 							</form>
 						</div>
 					{/if}
-					<!-- {#if !message.isUser && message.showLikeFeedback}
-                        <div
-                            transition:fly={{ y: 7, duration: 150 }}
-                            class="feedback-wrapper"
-                            style:display={message.showLikeFeedback
-                                ? "block"
-                                : "none"}
-                        >
-                            <div class="prefeedback-header">
-                                <h2 class="prefeedback-title">
-                                    Erzählen Sie uns mehr:
-                                </h2>
-                                <button
-                                    class="close-feedback"
-                                    on:click={() => closePreFeedback(message)}
-                                    ><svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="#00BCA1"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        class="lucide lucide-x"
-                                        ><path d="M18 6L6 18M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="prefeedback-content">
-                                <div class="prefeedback-buttons">
-                                    <button
-                                        class="active"
-                                        style="display: none;"
-                                    ></button>
-                                    <button class="button1"
-                                        >Medizinisch korrekt</button
-                                    >
-                                    <button class="button2"
-                                        >Technisch einwandfrei</button
-                                    >
-                                    <button class="button3"
-                                        >Emotionen treffend dargestellt</button
-                                    >
-                                    <button class="button4"
-                                        >Anweisungen präzise befolgt</button
-                                    >
-                                    <button
-                                        class="button5"
-                                        on:click={openFeedbackPopup}
-                                        >Lob oder weitere positive Rückmeldungen</button
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                    {/if} -->
 				</div>
 			{/each}
 			<!-- ==========MESSAGE OUTGOING========== -->
+
+			<!-- ==========CHAT FINISH MESSAGE========== -->
+
+			{#if solved}
+				<div class="message incoming medical-record">
+					<div class="message-full" style="display: flex; flex-direction: column;">
+						<img class="sender-img" src="/icons/description.png" alt="" />
+						<div class="message-info">
+							<h2 class="message-sender">Fallbeschreibung</h2>
+							<span class="message-time">19:34 pm</span>
+						</div>
+						<div class="message-content">
+							<p class="content-text">
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc consequat justo vel porta mattis. Nunc
+								eleifend mi velit, eu tincidunt ex fermentum eget. Sed id malesuada nibh, sit amet varius mi. Cras
+								luctus enim et justo aliquet, vel consequat quam pretium. Vivamus maximus lectus eget mauris egestas
+								maximus. Cras tincidunt neque et ex ultricies scelerisque. Nunc venenatis sem vitae tortor consectetur,
+								eget lacinia velit egestas. Praesent sollicitudin eget ligula at vehicula. Proin eget dui fermentum,
+								accumsan velit vel, aliquet erat. Vivamus quis urna finibus, convallis purus rutrum, laoreet libero.
+								Maecenas quis tristique justo, vitae rutrum tortor. Nulla semper lectus nec justo dapibus efficitur ac a
+								tellus. Vivamus laoreet erat in enim rhoncus, eget feugiat turpis dapibus. Maecenas consequat ac turpis
+								quis hendrerit. Vestibulum nec elit eget mi pharetra suscipit vel vitae ex. Aliquam at elit non risus
+								facilisis vulputate a accumsan felis. Quisque et sem quis quam posuere tincidunt. Curabitur faucibus ex
+								ac quam gravida, at scelerisque ex aliquet. Aenean imperdiet porta malesuada. Sed facilisis, velit ut
+								faucibus feugiat, nisl sem fermentum massa, ac aliquet leo ligula a arcu. Vivamus a nulla vel dui
+								placerat rutrum.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="chat-feedback-wrapper">
+					<button on:click={openChatFeedbackPopup} class="chat-feedback-btn">Schreiben Sie bitte Ihre Meinung</button>
+				</div>
+			{/if}
+			<!-- ==========CHAT FINISH MESSAGE========== -->
 		</div>
 
 		<div class="messagebox-wrapper">
@@ -694,8 +743,10 @@
 						bind:value={inputValue}
 						required
 						id="chat-input"
-						placeholder="Ask your questions"
+						placeholder={!solved ? "Stelle deine Fragen" : "Der Chat ist beendet"}
 						style="height: {textareaHeight}px;"
+						disabled={solved}
+						class={!solved ? "chat-input" : "chat-input disabled"}
 					></textarea>
 					<button on:click={addMessage} id="sendBtn" class="send-btn"
 						><svg
@@ -719,6 +770,87 @@
 </div>
 
 <style>
+	/* ===============CHAT FEEDBACK POPUP================ */
+
+	.rating-sliders-wrapper {
+		margin-top: 33px;
+		height: 420px;
+		overflow-y: scroll;
+		overflow-x: hidden;
+		padding: 0 20px;
+		scrollbar-width: thin;
+		scrollbar-color: #00bca1 #f1f1f1;
+	}
+
+	.rating-sliders-wrapper::-webkit-scrollbar {
+		width: 5px;
+	}
+
+	.rating-sliders-wrapper::-webkit-scrollbar-thumb {
+		background-color: #00bca1;
+		border-radius: 10px;
+	}
+
+	.rating-sliders-wrapper::-webkit-scrollbar-track {
+		background-color: #f1f1f1;
+	}
+
+	.chat-feedback-overlay {
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: #00000033;
+		z-index: 9999;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.chat-feedback-popup {
+		width: 100%;
+		max-width: 800px;
+		height: fit-content;
+		background-color: #fff;
+		border-radius: 0.75rem;
+		position: relative;
+		color: #000;
+		display: flex;
+		flex-direction: column;
+		box-shadow: 1px 5px 13px 1px #00000040;
+		padding: 34px 77px;
+		align-items: center;
+		gap: 100px;
+	}
+	/* ===============CHAT FEEDBACK POPUP================ */
+
+	.disabled {
+		background-color: #e5e5e5;
+		color: #9c9c9c;
+		cursor: not-allowed;
+	}
+	.chat-feedback-wrapper {
+		display: flex;
+		justify-content: center;
+	}
+
+	.chat-feedback-btn {
+		font-family: "Montserrat", sans-serif;
+		background-color: #00bca1;
+		color: white;
+		padding: 10px 20px;
+		border-radius: 10px;
+		font-size: 16px;
+		font-weight: 500;
+		cursor: pointer;
+	}
+
+	.chat-feedback-btn:hover,
+	.chat-feedback-btn:active {
+		background-color: #00a991;
+	}
+
 	/* ===============FEEDBACK CONTAINER================ */
 
 	.feedback-wrapper {
@@ -1306,7 +1438,7 @@
 	.message {
 		display: flex;
 		flex-direction: column;
-		gap: 10px;
+		gap: 2px;
 		width: 98%;
 	}
 
@@ -1483,6 +1615,39 @@
 	}
 
 	@media (max-width: 1440px) {
+		.rating-sliders-wrapper {
+			height: 380px;
+		}
+
+		.chat-feedback-overlay {
+			display: none;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: #00000033;
+			z-index: 9999;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.chat-feedback-popup {
+			width: 100%;
+			max-width: 800px;
+			height: fit-content;
+			background-color: #fff;
+			border-radius: 0.75rem;
+			position: relative;
+			color: #000;
+			display: flex;
+			flex-direction: column;
+			box-shadow: 1px 5px 13px 1px #00000040;
+			padding: 34px 77px;
+			align-items: center;
+			gap: 30px;
+		}
+
 		/* ===============FEEDBACK CONTAINER================ */
 
 		.feedback-wrapper {
@@ -1532,6 +1697,15 @@
 			font-weight: 500;
 			line-height: 1.25rem;
 			padding: 0.4rem 0.65rem;
+			border-radius: 0.5rem;
+		}
+
+		.prefeedback-submit {
+			font-size: 0.875rem;
+			white-space: nowrap;
+			font-weight: 500;
+			line-height: 1.25rem;
+			padding: 0.5rem 0.75rem;
 			border-radius: 0.5rem;
 		}
 
@@ -1608,10 +1782,10 @@
 			cursor: pointer;
 			background-color: #00bca1;
 			color: #fff;
-			font-size: 0.75rem;
+			font-size: 0.875rem;
 			font-weight: 500;
 			line-height: 1.25rem;
-			padding: 0.4rem 0.65rem;
+			padding: 0.5rem 0.75rem;
 			border-radius: 0.5rem;
 		}
 
@@ -1829,7 +2003,7 @@
 			display: flex;
 			flex-direction: column;
 			align-items: start;
-			gap: 10px;
+			gap: 2px;
 			width: 100%;
 		}
 		.message-info {
@@ -1856,7 +2030,7 @@
 			width: 31px;
 			height: 31px;
 			top: 0;
-			border-radius: 8px;
+			border-radius: 4px;
 			left: 0px;
 			z-index: 85;
 		}
@@ -1876,7 +2050,52 @@
 	}
 
 	@media (max-width: 1024px) {
+		.rating-sliders-wrapper {
+			height: 450px;
+		}
+
+		.chat-feedback-overlay {
+			display: none;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: #00000033;
+			z-index: 9999;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.chat-feedback-overlay form {
+			height: 100%;
+		}
+
+		.chat-feedback-popup {
+			width: 100%;
+			height: 100%;
+			background-color: #fff;
+			border-radius: 0.75rem;
+			position: relative;
+			color: #000;
+			display: flex;
+			flex-direction: column;
+			padding: 18px 32px;
+			align-items: center;
+			justify-content: center;
+			gap: 50px;
+			border-radius: 0;
+		}
+
 		/* ===============FEEDBACK CONTAINER================ */
+
+		.prefeedback-submit {
+			font-size: 0.7rem;
+			font-weight: 500;
+			line-height: 1.25rem;
+			padding: 0.5rem 0.75rem;
+			border-radius: 0.5rem;
+		}
 
 		.feedback-wrapper {
 			display: none;
@@ -1980,10 +2199,11 @@
 			cursor: pointer;
 			background-color: #00bca1;
 			color: #fff;
-			font-size: 0.75rem;
+			font-size: 0.875rem;
+			white-space: nowrap;
 			font-weight: 500;
 			line-height: 1.25rem;
-			padding: 0.4rem 0.65rem;
+			padding: 0.5rem 0.75rem;
 			border-radius: 0.5rem;
 		}
 

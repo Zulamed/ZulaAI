@@ -4,8 +4,7 @@
 	import { onMount } from "svelte";
 	import { needsPaddingChangedForMobile } from "../../routes/c/store";
 	import Tooltip from "$lib/components/tooltip.svelte";
-	import { firstStep } from "../../routes/auth/components/store";
-	import { fi } from "date-fns/locale";
+	import { chatHistory, type ChatHistory } from "$lib/stores/history";
 	let searchValue = "";
 
 	function openChatlist() {
@@ -44,10 +43,17 @@
 		exitDialog.style.display = "none";
 	}
 
-	let filteredHistory: History[] = [];
+	let filteredHistory: ChatHistory[] = [];
 
 	const names = [
 		"Alice",
+		"Tanisha",
+		"Lamar",
+		"Franklin",
+		"Carl",
+		"Sweet",
+		"Big Smoke",
+		"Ryder",
 		"Bob",
 		"Charlie",
 		"David",
@@ -75,7 +81,7 @@
 		"Zack"
 	];
 
-	$: filteredHistory = history.filter((item) => {
+	$: filteredHistory = $chatHistory.filter((item) => {
 		const search = searchValue.toLowerCase();
 		return item.title.toLowerCase().includes(search) || item.text.toLowerCase().includes(search);
 	});
@@ -90,20 +96,6 @@
 		};
 	});
 
-	type History = {
-		title: string;
-		time: string;
-		text: string;
-	};
-
-	let history: History[] = [
-		{
-			title: "Patient - Rashid",
-			time: "9:34 pm",
-			text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit ...`
-		}
-	];
-
 	function addChat() {
 		const time = new Date().toLocaleTimeString([], {
 			hour: "2-digit",
@@ -111,13 +103,15 @@
 			hour12: true
 		});
 		const randomName = names[Math.floor(Math.random() * names.length)];
-		history.push({
+		$chatHistory.push({
+			id: $chatHistory.length + 1,
 			title: `Patient - ${randomName}`,
 			time: time,
-			text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit ...`
+			text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit ...`,
+			isSolved: false
 		});
 		const chatlist = document.querySelector(".chatlist") as HTMLDivElement;
-		history = history;
+		$chatHistory = $chatHistory;
 		let diff = chatlist.clientHeight - chatlist.scrollHeight;
 		chatlist.scrollTo({ top: diff, behavior: "smooth" });
 	}
@@ -134,12 +128,7 @@
 	<div class="sidebar-buttons">
 		<div class="button-wrapper">
 			<Tooltip tooltipText="Chat">
-				<a
-					slot="trigger"
-					href="/c"
-					class="button-lg"
-					class:active={$page.url.pathname === "/c" || $page.url.pathname === "/c/chatId"}
-				>
+				<a slot="trigger" href="/c" class="button-lg" class:active={$page.url.pathname.includes("/c")}>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="24"
@@ -271,7 +260,7 @@
 		</div>
 	</div>
 	<div class="sidebar-chatlist">
-		{#if $page.url.pathname === "/c" || $page.url.pathname === "/c/chatId" || ($page.url.pathname === "/settings/account" && isMobile) || ($page.url.pathname === "/settings" && isMobile)}
+		{#if $page.url.pathname.includes("/c") || ($page.url.pathname === "/settings/account" && isMobile) || ($page.url.pathname === "/settings" && isMobile)}
 			<h1 class="chatlist-title">Meine Simulationen</h1>
 			<div class="search-chat-wrapper">
 				<button on:click={addChat} class="sidebar-lg-button"
@@ -304,14 +293,18 @@
 						>
 							<h2 class="chat-title">{item.title}</h2>
 							<span class="last-update">{item.time}</span>
-							<img src="/logo/Mobilelogo.webp" alt="" />
+							<img class="chatlist-logo" src="/logo/Mobilelogo.webp" alt="" />
 							<p class="last-message">
 								{item.text}
 							</p>
+
+							{#if item.isSolved}
+								<img src="/icons/chatSolved.svg" alt="" />
+							{/if}
 						</a>
 					{/each}
 				{:else}
-					{#each history as item}
+					{#each $chatHistory.slice().reverse() as item}
 						<a
 							transition:fly={{ y: -10, duration: 100 }}
 							href="/c/chatId"
@@ -320,9 +313,12 @@
 						>
 							<h2 class="chat-title">{item.title}</h2>
 							<span class="last-update">{item.time}</span>
-							<img src="/logo/Mobilelogo.webp" alt="" />
+							<img class="chatlist-logo" src="/logo/Mobilelogo.webp" alt="" />
 							<p class="last-message">
 								{item.text}
+								{#if item.isSolved}
+									<img class="chatSolvedSvg" src="/icons/chatSolved.svg" alt="" />
+								{/if}
 							</p>
 						</a>
 					{/each}
@@ -490,7 +486,7 @@
 	.chatlist {
 		width: 100%;
 		display: flex;
-		flex-direction: column-reverse;
+		flex-direction: column;
 		gap: 10px;
 		padding: 10px 5px 10px 0;
 		overflow-y: scroll;
@@ -521,7 +517,16 @@
 		background-color: #f4f4f4;
 	}
 
-	.chatlist-item img {
+	.chatSolvedSvg {
+		width: 24px;
+		height: 24px;
+		position: absolute;
+		top: 50%;
+		right: -15px;
+		transform: translateY(-50%);
+	}
+
+	.chatlist-item .chatlist-logo {
 		position: absolute;
 		top: 22px;
 		left: 11px;
@@ -535,10 +540,11 @@
 	}
 
 	.last-message {
+		width: 100%;
+		position: relative;
 		font-size: 15px;
 		font-weight: 400;
 		color: #000;
-		max-width: 232px;
 	}
 
 	.last-update {
@@ -684,6 +690,15 @@
 			gap: 14px;
 		}
 
+		.last-message {
+			width: 100%;
+		}
+		.chatSolvedSvg {
+			width: 20px;
+			height: 20px;
+			right: -20px;
+		}
+
 		.chatlist-title {
 			width: 100%;
 			text-align: start;
@@ -744,7 +759,7 @@
 		.chatlist {
 			width: 100%;
 			display: flex;
-			flex-direction: column-reverse;
+			flex-direction: column;
 			gap: 10px;
 			padding: 10px 3px 10px 0;
 			overflow: scroll;
@@ -768,7 +783,7 @@
 			background-color: #f4f4f4;
 		}
 
-		.chatlist-item img {
+		.chatlist-item .chatlist-logo {
 			position: absolute;
 			top: 18px;
 			left: 9px;
@@ -859,6 +874,9 @@
 	}
 
 	@media (max-width: 1024px) {
+		.chatSolvedSvg {
+			display: none;
+		}
 		.chatlist-header {
 			background-color: #fff;
 			position: relative;
