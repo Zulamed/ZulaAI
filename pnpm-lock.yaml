@@ -14,9 +14,6 @@ dependencies:
   date-fns:
     specifier: ^3.6.0
     version: 3.6.0
-  overlayscrollbars:
-    specifier: ^2.8.3
-    version: 2.8.3
 
 devDependencies:
   '@melt-ui/pp':
@@ -1015,10 +1012,6 @@ packages:
     dependencies:
       wrappy: 1.0.2
     dev: true
-
-  /overlayscrollbars@2.8.3:
-    resolution: {integrity: sha512-7JHA1oWm3Gru3RF5wwaeBdgk4keGtc56HMWEQRQi/RdLdY3pZTUDlSfUk1jyv1yQN12otr828n52rT6VNzYO4w==}
-    dev: false
 
   /parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
